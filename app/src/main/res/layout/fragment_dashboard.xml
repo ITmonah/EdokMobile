@@ -20,12 +20,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
+    <ImageView
+        android:id="@+id/loadingAnimation"
+        android:layout_width="200dp"
+        android:layout_height="260dp"
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/load_animation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:divider="#000000"
             android:dividerHeight="3dp"
             android:padding="5dp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints" >
+
+    </ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>

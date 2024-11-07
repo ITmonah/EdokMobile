@@ -5,17 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--Creating a ImageView-->
-
-    <!--Creating a TextView-->
-
     <ImageView
         android:id="@+id/imageRecipe"
         android:layout_width="0dp"
         android:layout_height="165dp"
         android:layout_margin="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="32dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,14 +19,18 @@
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
-        android:layout_width="398dp"
-        android:layout_height="126dp"
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="148dp"
         android:layout_margin="10dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="34dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="199dp">
+        app:layout_constraintTop_toBottomOf="@+id/imageRecipe"
+        tools:ignore="MissingConstraints">
 
         <TextView
             android:id="@+id/textCategory"
@@ -45,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Название рецепта" />
+            android:text="Название рецепта:" />
 
         <TextView
             android:id="@+id/textAutor"
@@ -63,13 +62,15 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="404dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
         android:layout_height="74dp"
         android:layout_margin="10dp"
+        android:layout_marginTop="22dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="345dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -82,10 +83,10 @@
             <ImageButton
                 android:id="@+id/imageButtonLike"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="#00FFFFFF"
-                android:src="@drawable/baseline_favorite_border_24" />
+                android:src="@drawable/like" />
 
             <TextView
                 android:id="@+id/textLikes"
@@ -105,10 +106,11 @@
             <ImageButton
                 android:id="@+id/imageButtonDizlikes"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="#00FFFFFF"
-                app:srcCompat="@drawable/baseline_thumb_down_off_alt_24" />
+                android:visibility="visible"
+                app:srcCompat="@drawable/bad_one" />
 
             <TextView
                 android:id="@+id/textViewDizlikes"
@@ -128,9 +130,10 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/outline_timer_12" />
+                android:visibility="visible"
+                app:srcCompat="@drawable/timer" />
 
             <TextView
                 android:id="@+id/textViewTime"
