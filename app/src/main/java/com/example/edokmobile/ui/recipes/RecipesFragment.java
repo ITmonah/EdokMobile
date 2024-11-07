@@ -1,4 +1,4 @@
-package com.example.edokmobile.ui.dashboard;
+package com.example.edokmobile.ui.recipes;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,11 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.edokmobile.databinding.FragmentDashboardBinding;
 
-public class DashboardFragment extends Fragment {
+public class RecipesFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 

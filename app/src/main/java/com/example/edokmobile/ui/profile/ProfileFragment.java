@@ -1,4 +1,4 @@
-package com.example.edokmobile.ui.notifications;
+package com.example.edokmobile.ui.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,11 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.edokmobile.databinding.FragmentNotificationsBinding;
 
-public class NotificationsFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     private FragmentNotificationsBinding binding;
 
@@ -22,7 +21,6 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
         return root;
     }
 

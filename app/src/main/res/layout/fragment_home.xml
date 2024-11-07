@@ -49,7 +49,9 @@
                             android:id="@+id/imageView5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/logotext" />
+                            android:scaleType="fitStart"
+                            android:src="@drawable/logotext"
+                            android:textAlignment="gravity" />
 
                         <TextView
                             android:id="@+id/textView3"
@@ -57,12 +59,42 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="13dp"
                             android:fontFamily="@font/montserrat_bold"
-                            android:text="Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название и сайт подберет соответствующий."
+                            android:text="Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название приложение подберет соответствующий."
                             android:textColor="#FFFFFF"
                             android:textSize="24sp" />
                     </LinearLayout>
 
                 </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:paddingLeft="13dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Лучшие блюда"
+                        android:textColor="#020202"
+                        android:textSize="28sp" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:paddingLeft="13dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Лучшие повара"
+                        android:textColor="#020202"
+                        android:textSize="28sp" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </FrameLayout>
