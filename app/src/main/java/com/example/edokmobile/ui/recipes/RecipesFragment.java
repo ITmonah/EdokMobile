@@ -1,4 +1,4 @@
-package com.example.edokmobile.ui.dashboard;
+package com.example.edokmobile.ui.recipes;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -21,7 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.edokmobile.R;
-import com.example.edokmobile.databinding.FragmentDashboardBinding;
+import com.example.edokmobile.databinding.FragmentRecipesBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,16 +36,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class DashboardFragment extends Fragment {
+public class RecipesFragment extends Fragment {
 
     protected OkHttpClient client = new OkHttpClient();
-    private FragmentDashboardBinding binding;
+    private FragmentRecipesBinding binding;
     private ListView listView;
     private ImageView loadingAnimation;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentRecipesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         final TextView textView = binding.textDashboard;
         listView = binding.listView;
