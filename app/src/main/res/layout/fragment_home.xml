@@ -95,6 +95,7 @@
                         android:textColor="#020202"
                         android:textSize="28sp" />
                 </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
     </FrameLayout>
