@@ -8,18 +8,18 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.edokmobile.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="Главная"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.edokmobile.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="Рецепты"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.edokmobile.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:label="Профиль"
         tools:layout="@layout/fragment_notifications" />
 </navigation>
