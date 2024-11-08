@@ -15,11 +15,11 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.edokmobile.ui.recipes.RecipesFragment"
         android:label="Рецепты"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_recipes" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.edokmobile.ui.profile.ProfileFragment"
         android:label="Профиль"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" />
 </navigation>
