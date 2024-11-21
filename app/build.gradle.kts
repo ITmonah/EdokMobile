@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.example.edokmobile"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.edokmobile"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -35,7 +35,9 @@ android {
 }
 
 dependencies {
-
+    implementation("androidx.credentials:credentials:1.5.0-alpha05")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha05")
+    implementation("com.google.android.gms:play-services-auth:20.4.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -43,6 +45,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
