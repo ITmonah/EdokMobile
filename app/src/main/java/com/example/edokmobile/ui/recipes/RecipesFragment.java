@@ -187,11 +187,17 @@ public class RecipesFragment extends Fragment {
             // Проверка на пустой список (необязательно, но рекомендуется)
             if (s.isEmpty()) {
                 Toast.makeText(getContext(), "Нет данных", Toast.LENGTH_SHORT).show();
+                loadingAnimation.setVisibility(View.GONE);
+                // Остановите анимацию
+                loadingAnimation.clearAnimation();
                 return; // Предотвращаем дальнейшее выполнение, если список пуст
             }
             SimpleAdapter simpleAdapter_category = new SimpleAdapter(getContext().getApplicationContext(), s, android.R.layout.simple_spinner_item, from_category, to_category);
             simpleAdapter_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //визуализация списка
             spinner.setAdapter(simpleAdapter_category); //применяем адаптер к элементу spinner
+            loadingAnimation.setVisibility(View.GONE);
+            // Остановите анимацию
+            loadingAnimation.clearAnimation();
         }
     }
 
