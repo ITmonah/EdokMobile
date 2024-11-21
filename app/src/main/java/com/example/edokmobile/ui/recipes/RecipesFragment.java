@@ -148,12 +148,16 @@ public class RecipesFragment extends Fragment {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getContext().getApplicationContext(), DetailedActivity.class);
+                    Toast.makeText(getContext(), "Подробнее", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity().getApplicationContext(), DetailedActivity.class);
                     String name = "Название рецепта";
                     intent.putExtra("name", name );
                     startActivity(intent);
                 }
             });
+            loadingAnimation.setVisibility(View.GONE);
+            //остановка анимации
+            loadingAnimation.clearAnimation();
         }
     }
     //ассинхронный поток 2
