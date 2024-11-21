@@ -59,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
                     String email = account.getEmail();
                     Toast toast_acc = Toast.makeText(getApplicationContext(), "Привет, " + name + "(" + email + ")", Toast.LENGTH_LONG);
                     toast_acc.show();
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
                 }
             } catch (ApiException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Ошибка входа", Toast.LENGTH_LONG);
