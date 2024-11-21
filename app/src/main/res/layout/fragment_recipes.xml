@@ -34,14 +34,25 @@
         tools:ignore="MissingConstraints" />
 
     <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:divider="#000000"
-            android:dividerHeight="3dp"
-            android:padding="5dp"
-            tools:ignore="MissingConstraints" >
-
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:divider="#000000"
+        android:dividerHeight="3dp"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="10dp">
     </ListView>
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="86dp"
+        tools:ignore="MissingConstraints" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
