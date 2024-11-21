@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login_btn;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email = account.getEmail();
                     Toast toast_acc = Toast.makeText(getApplicationContext(), "Привет, " + name + "(" + email + ")", Toast.LENGTH_LONG);
                     toast_acc.show();
+                    ((MyApplication) getApplicationContext()).setSomeVariable(account);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
                 }

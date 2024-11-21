@@ -1,5 +1,6 @@
 package com.example.edokmobile;
 
+import android.app.Application;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;

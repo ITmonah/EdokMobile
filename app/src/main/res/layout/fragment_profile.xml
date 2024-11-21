@@ -141,45 +141,17 @@
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
-            <EditText
-                android:id="@+id/editTextTextEmailAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                android:layout_marginBottom="13dp"
-                android:ems="10"
-                android:fontFamily="@font/montserrat_medium"
-                android:hint="edok@mail.ru"
-                android:inputType="textEmailAddress"
-                android:textColorHint="#AEAEAE"
-                android:textSize="20sp" />
-
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingLeft="13dp"
-                android:paddingRight="13dp"
-                android:text="Пароль"
-                android:textColor="#000000"
-                android:textSize="24sp" />
-
-            <EditText
-                android:id="@+id/editTextTextPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
                 android:layout_marginRight="13dp"
                 android:layout_marginBottom="13dp"
-                android:ems="10"
                 android:fontFamily="@font/montserrat_medium"
-                android:hint="***********"
-                android:inputType="textPassword"
-                android:textColorHint="#AEAEAE"
-                android:textSize="20sp" />
+                android:text="..."
+                android:textColor="#AEAEAE"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textView10"
