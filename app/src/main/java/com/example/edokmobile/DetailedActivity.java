@@ -2,6 +2,7 @@ package com.example.edokmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,11 +10,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.edokmobile.databinding.ActivityDetailedBinding;
-
 public class DetailedActivity extends AppCompatActivity {
 
-    ActivityDetailedBinding binding;
+    private TextView detailName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +25,11 @@ public class DetailedActivity extends AppCompatActivity {
             return insets;
         });
 
+        detailName = findViewById(R.id.detailName);
         Intent intent = this.getIntent();
         if (intent != null){
             String name = intent.getStringExtra("name");
-            binding.detailName.setText(name);
+            detailName.setText(name);
         }
     }
 }

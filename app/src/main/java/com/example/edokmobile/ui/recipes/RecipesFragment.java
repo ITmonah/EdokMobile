@@ -49,7 +49,7 @@ import okhttp3.Response;
 
 public class RecipesFragment extends Fragment {
 
-    protected OkHttpClient client  = ((MyApplication) getActivity().getApplication()).getClient();
+    protected OkHttpClient client  = new OkHttpClient();
     private FragmentRecipesBinding binding;
     private ListView listView;
     private ImageView loadingAnimation;
@@ -141,19 +141,20 @@ public class RecipesFragment extends Fragment {
                 }
             });
             listView.setAdapter(simpleAdapter);
-            loadingAnimation.setVisibility(View.GONE);
-            //остановка анимации
-            loadingAnimation.clearAnimation();
             //открытие детального окна
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getContext().getApplicationContext(), DetailedActivity.class);
+                    Toast.makeText(getContext(), "Подробнее", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity().getApplicationContext(), DetailedActivity.class);
                     String name = "Название рецепта";
                     intent.putExtra("name", name );
                     startActivity(intent);
                 }
             });
+            loadingAnimation.setVisibility(View.GONE);
+            //остановка анимации
+            loadingAnimation.clearAnimation();
         }
     }
     //ассинхронный поток 2
