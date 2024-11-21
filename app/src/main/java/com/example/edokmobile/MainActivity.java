@@ -12,9 +12,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.edokmobile.databinding.ActivityMainBinding;
 
+import okhttp3.OkHttpClient;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    //protected OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
