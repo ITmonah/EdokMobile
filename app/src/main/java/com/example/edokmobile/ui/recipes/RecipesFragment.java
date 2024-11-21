@@ -1,5 +1,6 @@
 package com.example.edokmobile.ui.recipes;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,8 +24,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.edokmobile.DetailedActivity;
+import com.example.edokmobile.MainActivity;
+import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentRecipesBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +49,7 @@ import okhttp3.Response;
 
 public class RecipesFragment extends Fragment {
 
-    protected OkHttpClient client = new OkHttpClient();
+    protected OkHttpClient client  = ((MyApplication) getActivity().getApplication()).getClient();
     private FragmentRecipesBinding binding;
     private ListView listView;
     private ImageView loadingAnimation;
@@ -136,8 +142,18 @@ public class RecipesFragment extends Fragment {
             });
             listView.setAdapter(simpleAdapter);
             loadingAnimation.setVisibility(View.GONE);
-            // Остановите анимацию
+            //остановка анимации
             loadingAnimation.clearAnimation();
+            //открытие детального окна
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getContext().getApplicationContext(), DetailedActivity.class);
+                    String name = "Название рецепта";
+                    intent.putExtra("name", name );
+                    startActivity(intent);
+                }
+            });
         }
     }
     //ассинхронный поток 2

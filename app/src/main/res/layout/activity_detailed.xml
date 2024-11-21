@@ -22,30 +22,56 @@
     </TextView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardImage"
         android:layout_width="380dp"
         android:layout_height="380dp"
-        android:id="@+id/cardImage"
         android:layout_gravity="center"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp">
 
     <ImageView
+        android:id="@+id/detailImage"
         android:layout_width="380dp"
         android:layout_height="200dp"
-        android:id="@+id/detailImage"
         android:layout_gravity="center"
         android:src="@drawable/like"
         android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Duration"
+        android:text="Шаги приготовления"
         android:textColor="#82C582"
         android:textStyle="bold"
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
         android:textSize="18sp"/>
 
+    <TextView
+        android:id="@+id/detailTime"
+        android:layout_width="match_parent"
+        android:layout_height= "wrap_content"
+        android:text="Время приготовления: "
+        android:layout_marginStart="10dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/material_motion_easing_accelerated"
+        android:textColor="#82C582"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/detailIngredients"
+        android:layout_width="match_parent"
+        android:layout_height= "wrap_content"
+        android:text="Ингредиент такой-то"
+        android:layout_marginStart="10dp"
+        android:textSize="16sp"/>
 
 </LinearLayout>
