@@ -49,7 +49,7 @@ import okhttp3.Response;
 
 public class RecipesFragment extends Fragment {
 
-    protected OkHttpClient client  = ((MyApplication) getActivity().getApplication()).getClient();
+    protected OkHttpClient client = new OkHttpClient();
     private FragmentRecipesBinding binding;
     private ListView listView;
     private ImageView loadingAnimation;
