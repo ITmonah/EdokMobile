@@ -58,9 +58,11 @@ public class RecipesFragment extends Fragment {
         listView = binding.listView;
         loadingAnimation = binding.loadingAnimation;
         OkHTTPHandler handler = new OkHTTPHandler();
-        OkHTTPHandler_2 handler2 = new OkHTTPHandler_2();
-        handler2.execute();
+        //OkHTTPHandler_2 handler2 = new OkHTTPHandler_2();
+        OkHTTPHandler_3 handler3 = new OkHTTPHandler_3();
+        //handler2.execute();
         handler.execute();
+        handler3.execute();
         return root;
     }
     //ассинхронный поток
@@ -92,6 +94,7 @@ public class RecipesFragment extends Fragment {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String title = jsonObject.getString("title"); //название рецепта
+                    String category = jsonObject.getString("category"); //категория рецепта
                     String price = jsonObject.getString("price"); //цена рецепта
                     String img = jsonObject.getString("image"); //картинка
                     URL img_url = new URL(img);
@@ -100,7 +103,8 @@ public class RecipesFragment extends Fragment {
                     BitmapDrawable drawable = new BitmapDrawable(getResources(), image); //преображение bitmap в drawable
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("recipeName", title);
-                    map.put("recipePrice", price);
+                    map.put("recipeCategory", "Категория: " + category);
+                    map.put("recipePrice", "Цена: " + price);
                     map.put("recipeImage", drawable);
                     list.add(map);
                 }
@@ -116,9 +120,9 @@ public class RecipesFragment extends Fragment {
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
             //сюда надо передавать значения
-            String[] from = {"recipeName", "recipePrice","recipeImage"};
-            int to[] = {R.id.textName, R.id.textAutor,R.id.imageRecipe};
-            SimpleAdapter simpleAdapter = new SimpleAdapter(getContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
+            String[] from = {"recipeName", "recipeCategory", "recipePrice","recipeImage"};
+            int to[] = {R.id.textName,R.id.textCategory, R.id.textAutor,R.id.imageRecipe};
+            SimpleAdapter simpleAdapter = new SimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
             //определение, как SimpleAdapter должен устанавливать Drawable в ImageView
             simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
@@ -200,6 +204,55 @@ public class RecipesFragment extends Fragment {
             loadingAnimation.clearAnimation();
         }
     }
+
+    //ассинхронный поток 2
+    public class OkHTTPHandler_3 extends AsyncTask<Void,Void,ArrayList> {
+        @Override
+        protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
+            //запрос для вывода категорий
+            Request.Builder builder_category = new Request.Builder(); //построитель запроса
+            Request request_category = builder_category.url("https://fakestoreapi.com/products/categories")
+                    .get() //тип запроса
+                    .build();
+            try {
+                Response response = client.newCall(request_category).execute();
+                JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
+                ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    String nameCategory = jsonArray.getString(i); //название категории
+                    HashMap<String, Object> map_category = new HashMap<>();
+                    map_category.put("nameCategory", nameCategory);
+                    list.add(map_category);
+                }
+                return list;
+            } catch (IOException e) {
+                Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
+                return new ArrayList<>(); // Возвращаем пустой список при ошибке
+            } catch (JSONException e) {
+                Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
+                return new ArrayList<>(); // Возвращаем пустой список при ошибке
+            }
+        }
+        @Override
+        protected void onPostExecute(ArrayList s) {
+            super.onPostExecute(s);
+            String[] from_category = {"nameCategory"};
+            int to_category[] = {R.id.spinnerCategory};
+            spinner = binding.spinnerCategory;
+            if (s.isEmpty()) {
+                Toast.makeText(getContext(), "Нет данных", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            SimpleAdapter simpleAdapter_category = new SimpleAdapter(requireContext().getApplicationContext(), s, R.layout.spinner_item, from_category, to_category);
+            simpleAdapter_category.setDropDownViewResource(R.layout.spinner_item);
+            if (spinner == null) {
+                Toast.makeText(getContext(), "Список пуст", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            spinner.setAdapter(simpleAdapter_category);
+        }
+    }
+
 
     @Override
     public void onDestroyView() {
