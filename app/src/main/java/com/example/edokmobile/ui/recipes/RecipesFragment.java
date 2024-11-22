@@ -38,6 +38,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ public class RecipesFragment extends Fragment {
     private ListView listView;
     private ImageView loadingAnimation;
     private Spinner spinner;
+    private TextView text_view;
     String url = "https://fakestoreapi.com/products";
     boolean isFirstSelection = true; // Флаг для отслеживания первого выбора
 
@@ -62,11 +64,12 @@ public class RecipesFragment extends Fragment {
 
         binding = FragmentRecipesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        final TextView textView = binding.textDashboard;
         listView = binding.listView;
         loadingAnimation = binding.loadingAnimation;
         spinner = binding.spinnerCategory;
+        text_view = binding.textView7;
         spinner.setVisibility(View.GONE);
+        text_view.setVisibility(View.GONE);
         OkHTTPHandler handler = new OkHTTPHandler();
         //OkHTTPHandler_2 handler2 = new OkHTTPHandler_2();
         OkHTTPHandler_3 handler3 = new OkHTTPHandler_3();
@@ -89,6 +92,9 @@ public class RecipesFragment extends Fragment {
         }
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
+            if ( isCancelled()){
+                return null;
+            }
             Request.Builder builder = new Request.Builder(); //построитель запроса
             Request request = builder.url(url)
                     .get() //тип запроса
@@ -121,6 +127,9 @@ public class RecipesFragment extends Fragment {
                 Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
             } catch (JSONException e) {
                 Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
+            } catch (Exception e) {
+                Log.e("MyAsyncTask", "Ошибка в doInBackground", e);
+                return null;
             }
             return null;
         }
@@ -147,7 +156,6 @@ public class RecipesFragment extends Fragment {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Toast.makeText(getContext(), "Подробнее", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity().getApplicationContext(), DetailedActivity.class);
                     Map<?, ?> itemMap = (Map<?, ?>) adapterView.getItemAtPosition(i);
                     String item = (String) itemMap.get("recipeId");
@@ -159,7 +167,12 @@ public class RecipesFragment extends Fragment {
             //остановка анимации
             loadingAnimation.clearAnimation();
             spinner.setVisibility(View.VISIBLE);
+            text_view.setVisibility(View.VISIBLE);
             listView.setVisibility(View.VISIBLE);
+        }
+        @Override
+        protected void onCancelled() {
+            //обработка отмены задачи
         }
     }
     //ассинхронный поток 2
@@ -178,6 +191,9 @@ public class RecipesFragment extends Fragment {
         }
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
+            if ( isCancelled()){
+                return null;
+            }
             //запрос для вывода категорий
             Request.Builder builder_category = new Request.Builder(); //построитель запроса
             Request request_category = builder_category.url("http://127.0.0.1:8000/category/")
@@ -201,6 +217,9 @@ public class RecipesFragment extends Fragment {
             } catch (JSONException e) {
                 Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
                 return new ArrayList<>(); // Возвращаем пустой список при ошибке
+            } catch (Exception e) {
+                Log.e("MyAsyncTask", "Ошибка в doInBackground", e);
+                return null;
             }
         }
         @Override
@@ -230,6 +249,9 @@ public class RecipesFragment extends Fragment {
     public class OkHTTPHandler_3 extends AsyncTask<Void,Void,ArrayList> {
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
+            if ( isCancelled()){
+                return null;
+            }
             //запрос для вывода категорий
             Request.Builder builder_category = new Request.Builder(); //построитель запроса
             Request request_category = builder_category.url("https://fakestoreapi.com/products/categories")
@@ -256,6 +278,9 @@ public class RecipesFragment extends Fragment {
             } catch (JSONException e) {
                 Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
                 return new ArrayList<>(); // Возвращаем пустой список при ошибке
+            } catch (Exception e) {
+                Log.e("MyAsyncTask", "Ошибка в doInBackground", e);
+                return null;
             }
         }
         @Override

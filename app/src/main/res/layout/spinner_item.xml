@@ -3,5 +3,6 @@
     android:id="@+id/spinnerCategory"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="16sp"
-    android:padding="10dp"/>
+    android:padding="10dp"
+    android:textColor="#F42A48"
+    android:textSize="16sp" />
