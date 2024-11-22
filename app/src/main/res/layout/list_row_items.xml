@@ -22,8 +22,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
-        android:clickable="true"
-        android:focusable="true"/>
+        android:clickable="false"
+        android:focusable="false"
+        android:descendantFocusability="blocksDescendants"/>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -44,28 +45,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Категории:" />
+            android:text="Категории:"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/textName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Название рецепта:" />
+            android:text="Название рецепта:"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/textAutor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Автор:" />
+            android:text="Автор:"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/textDataPublish"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Дата публикации:" />
+            android:text="Автор: Любитель вкусняшек"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <LinearLayout
@@ -101,7 +106,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center|center_horizontal|center_vertical"
-                android:text="56" />
+                android:text="56"
+                android:textColor="#000000" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,21 +118,21 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/imageButtonDizlikes"
+                android:id="@+id/imageButtonDizLike"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="#00FFFFFF"
                 android:scaleType="centerInside"
-                android:visibility="visible"
-                app:srcCompat="@drawable/bad_one" />
+                android:src="@drawable/bad_one" />
 
             <TextView
                 android:id="@+id/textViewDizlikes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center|center_horizontal|center_vertical"
-                android:text="3" />
+                android:text="3"
+                android:textColor="#000000" />
         </LinearLayout>
 
         <LinearLayout
@@ -137,20 +143,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:scaleType="centerInside"
-                android:visibility="visible"
-                app:srcCompat="@drawable/timer" />
+                android:src="@drawable/timer" />
 
             <TextView
                 android:id="@+id/textViewTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center|center_horizontal|center_vertical"
-                android:text="2 часа" />
+                android:text="2 часа"
+                android:textColor="#000000" />
         </LinearLayout>
     </LinearLayout>
 
