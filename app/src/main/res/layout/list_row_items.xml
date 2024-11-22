@@ -22,8 +22,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
-        android:clickable="true"
-        android:focusable="true"/>
+        android:clickable="false"
+        android:focusable="false"
+        android:descendantFocusability="blocksDescendants"/>
 
     <LinearLayout
         android:id="@+id/linearLayout2"

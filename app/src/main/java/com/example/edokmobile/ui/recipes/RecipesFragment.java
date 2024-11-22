@@ -54,6 +54,8 @@ public class RecipesFragment extends Fragment {
     private ListView listView;
     private ImageView loadingAnimation;
     private Spinner spinner;
+    String url = "https://fakestoreapi.com/products";
+    boolean isFirstSelection = true; // Флаг для отслеживания первого выбора
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class RecipesFragment extends Fragment {
         final TextView textView = binding.textDashboard;
         listView = binding.listView;
         loadingAnimation = binding.loadingAnimation;
+        spinner = binding.spinnerCategory;
+        spinner.setVisibility(View.GONE);
         OkHTTPHandler handler = new OkHTTPHandler();
         //OkHTTPHandler_2 handler2 = new OkHTTPHandler_2();
         OkHTTPHandler_3 handler3 = new OkHTTPHandler_3();
@@ -73,24 +77,20 @@ public class RecipesFragment extends Fragment {
     }
     //ассинхронный поток
     public class OkHTTPHandler extends AsyncTask<Void,Void,ArrayList> { //что подаём на вход, что в середине, что возвращаем
-
         //запуск экрана загрузки
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //loadingAnimation.setVisibility(View.VISIBLE);
             AlphaAnimation animation = new AlphaAnimation(1f, 0f);
             animation.setDuration(750); //длительность анимации в миллисекундах
             animation.setRepeatCount(Animation.INFINITE); //повторять бесконечно
             animation.setRepeatMode(Animation.REVERSE); //переключать между видим и невидимым
             loadingAnimation.startAnimation(animation);
-            //loadingAnimation.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.load_animation));
         }
-
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
             Request.Builder builder = new Request.Builder(); //построитель запроса
-            Request request = builder.url("https://fakestoreapi.com/products")
+            Request request = builder.url(url)
                     .get() //тип запроса
                     .build();
             try {
@@ -99,6 +99,7 @@ public class RecipesFragment extends Fragment {
                 ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String id = jsonObject.getString("id"); //id рецепта
                     String title = jsonObject.getString("title"); //название рецепта
                     String category = jsonObject.getString("category"); //категория рецепта
                     String price = jsonObject.getString("price"); //цена рецепта
@@ -108,6 +109,7 @@ public class RecipesFragment extends Fragment {
                     Bitmap image = BitmapFactory.decodeStream(inputStream);
                     BitmapDrawable drawable = new BitmapDrawable(getResources(), image); //преображение bitmap в drawable
                     HashMap<String, Object> map = new HashMap<>();
+                    map.put("recipeId", id);
                     map.put("recipeName", title);
                     map.put("recipeCategory", "Категория: " + category);
                     map.put("recipePrice", "Цена: " + price);
@@ -147,14 +149,17 @@ public class RecipesFragment extends Fragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Toast.makeText(getContext(), "Подробнее", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity().getApplicationContext(), DetailedActivity.class);
-                    String name = "Название рецепта";
-                    intent.putExtra("name", name );
+                    Map<?, ?> itemMap = (Map<?, ?>) adapterView.getItemAtPosition(i);
+                    String item = (String) itemMap.get("recipeId");
+                    intent.putExtra("recipe", item); //запоминание отдельного рецепта
                     startActivity(intent);
                 }
             });
             loadingAnimation.setVisibility(View.GONE);
             //остановка анимации
             loadingAnimation.clearAnimation();
+            spinner.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.VISIBLE);
         }
     }
     //ассинхронный поток 2
@@ -221,8 +226,7 @@ public class RecipesFragment extends Fragment {
             loadingAnimation.clearAnimation();
         }
     }
-
-    //ассинхронный поток 2
+    //выпадающий список
     public class OkHTTPHandler_3 extends AsyncTask<Void,Void,ArrayList> {
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
@@ -235,9 +239,13 @@ public class RecipesFragment extends Fragment {
                 Response response = client.newCall(request_category).execute();
                 JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
                 ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
+                String name_all = "Всё"; //название категории "Все"
+                HashMap<String, Object> map_category = new HashMap<>();
+                map_category.put("nameCategory", name_all);
+                list.add(map_category);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     String nameCategory = jsonArray.getString(i); //название категории
-                    HashMap<String, Object> map_category = new HashMap<>();
+                    map_category = new HashMap<>();
                     map_category.put("nameCategory", nameCategory);
                     list.add(map_category);
                 }
@@ -255,7 +263,6 @@ public class RecipesFragment extends Fragment {
             super.onPostExecute(s);
             String[] from_category = {"nameCategory"};
             int to_category[] = {R.id.spinnerCategory};
-            spinner = binding.spinnerCategory;
             if (s.isEmpty()) {
                 Toast.makeText(getContext(), "Нет данных", Toast.LENGTH_SHORT).show();
                 return;
@@ -267,14 +274,45 @@ public class RecipesFragment extends Fragment {
                 return;
             }
             spinner.setAdapter(simpleAdapter_category);
+            //взаимодействие со списком
+            AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (isFirstSelection) {
+                        isFirstSelection = false;
+                        return;
+                    }
+                    if (position == 0){
+                        url =  "https://fakestoreapi.com/products";
+                        listView.setVisibility(View.GONE);
+                        OkHTTPHandler handler = new OkHTTPHandler();
+                        handler.execute();
+                    }
+                    else{
+                        Map<?, ?> itemMap = (Map<?, ?>) parent.getItemAtPosition(position);
+                        String item = (String) itemMap.get("nameCategory");
+                        //обработка случая, если ключ не найден или значение не является строкой
+                        if (item == null) {
+                            Log.e("Spinner", "Ключ не найден в Map, или значение не является строкой.");
+                            return;
+                        }
+                        url =  "https://fakestoreapi.com/products/category/" + item;
+                        listView.setVisibility(View.GONE);
+                        OkHTTPHandler handler = new OkHTTPHandler();
+                        handler.execute();
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            };
+            spinner.setOnItemSelectedListener(itemSelectedListener);
         }
     }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        binding = null;
+//    }
 }
 
