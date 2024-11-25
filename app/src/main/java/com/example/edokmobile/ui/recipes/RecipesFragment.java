@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.edokmobile.DetailedActivity;
 import com.example.edokmobile.MainActivity;
 import com.example.edokmobile.MyApplication;
@@ -56,8 +57,8 @@ public class RecipesFragment extends Fragment {
     private ImageView loadingAnimation;
     private Spinner spinner;
     private TextView text_view;
-    String url = "https://fakestoreapi.com/products";
-    boolean isFirstSelection = true; // Флаг для отслеживания первого выбора
+    String url = "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true?sort=created_at&page=1&size=50";
+    boolean isFirstSelection = true; //флаг для отслеживания первого выбора
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -71,9 +72,7 @@ public class RecipesFragment extends Fragment {
         spinner.setVisibility(View.GONE);
         text_view.setVisibility(View.GONE);
         OkHTTPHandler handler = new OkHTTPHandler();
-        //OkHTTPHandler_2 handler2 = new OkHTTPHandler_2();
         OkHTTPHandler_3 handler3 = new OkHTTPHandler_3();
-        //handler2.execute();
         handler.execute();
         handler3.execute();
         return root;
@@ -101,25 +100,29 @@ public class RecipesFragment extends Fragment {
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
+                JSONObject jsonObject_start = new JSONObject(response.body().string());//сначала объект элементов
+                JSONArray jsonArray = jsonObject_start.getJSONArray("items");//массив элементов "items"
                 ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String id = jsonObject.getString("id"); //id рецепта
-                    String title = jsonObject.getString("title"); //название рецепта
-                    String category = jsonObject.getString("category"); //категория рецепта
-                    String price = jsonObject.getString("price"); //цена рецепта
-                    String img = jsonObject.getString("image"); //картинка
-                    URL img_url = new URL(img);
-                    InputStream inputStream = img_url.openStream();
-                    Bitmap image = BitmapFactory.decodeStream(inputStream);
-                    BitmapDrawable drawable = new BitmapDrawable(getResources(), image); //преображение bitmap в drawable
+                    String title = jsonObject.getString("name"); //название рецепта
+                    JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
+                    String category = category_object.getString("name");
+                    String price = jsonObject.getString("cooking_time"); //время приготовления рецепта
+                    String img = "https://j41kw20c-8000.euw.devtunnels.ms/" + jsonObject.getString("face_img"); //картинка
+                    //URL img_url = new URL("https://j41kw20c-8000.euw.devtunnels.ms/" + img);
+
+//                    //
+//                    InputStream inputStream = img_url.openStream();
+//                    Bitmap image = BitmapFactory.decodeStream(inputStream);
+//                    BitmapDrawable drawable = new BitmapDrawable(getResources(), image); //преображение bitmap в drawable
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("recipeId", id);
                     map.put("recipeName", title);
                     map.put("recipeCategory", "Категория: " + category);
-                    map.put("recipePrice", "Цена: " + price);
-                    map.put("recipeImage", drawable);
+                    map.put("recipePrice", "Время готовки: " + price);
+                    map.put("recipeImage", img);
                     list.add(map);
                 }
                 return list;
@@ -144,11 +147,31 @@ public class RecipesFragment extends Fragment {
             simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
                 public boolean setViewValue(View view, Object data, String textRepresentation) {
-                    if (view instanceof ImageView && data instanceof BitmapDrawable) {
-                        ((ImageView) view).setImageDrawable((BitmapDrawable) data);
+                    //if (view instanceof ImageView && data instanceof BitmapDrawable) {
+                    if (view.getId() == R.id.imageRecipe) {
+                        String imageUrl = data.toString();
+                        if (imageUrl != null && !imageUrl.isEmpty()) {
+                            Glide.with(getContext())
+                                    .load(imageUrl)
+                                    .placeholder(R.drawable.group_23)
+                                    .error(R.drawable.group_23)
+                                    .into((ImageView) view);
+                        } else {
+                            ((ImageView) view).setImageResource(R.drawable.group_23);
+                        }
                         return true;
                     }
-                    return false;
+                    return false; // Для других View не обрабатываем
+
+//                        Glide.with(getContext())
+//                                .load(data.toString()) //ссылка
+//                                .placeholder(R.drawable.group_23) // опционально, пока изображение загружается
+//                                .error(R.drawable.group_23) // опционально, если загрузка изображения не удалась
+//                                .into((ImageView) view);
+                        //((ImageView) view).setImageDrawable((BitmapDrawable) data);
+                       // return true;
+                    //}
+                    //return false;
                 }
             });
             listView.setAdapter(simpleAdapter);
@@ -175,76 +198,6 @@ public class RecipesFragment extends Fragment {
             //обработка отмены задачи
         }
     }
-    //ассинхронный поток 2
-    public class OkHTTPHandler_2 extends AsyncTask<Void,Void,ArrayList> {
-        //запуск экрана загрузки
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //loadingAnimation.setVisibility(View.VISIBLE);
-            AlphaAnimation animation = new AlphaAnimation(1f, 0f);
-            animation.setDuration(750); //длительность анимации в миллисекундах
-            animation.setRepeatCount(Animation.INFINITE); //повторять бесконечно
-            animation.setRepeatMode(Animation.REVERSE); //переключать между видим и невидимым
-            loadingAnimation.startAnimation(animation);
-            //loadingAnimation.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.load_animation));
-        }
-        @Override
-        protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
-            if ( isCancelled()){
-                return null;
-            }
-            //запрос для вывода категорий
-            Request.Builder builder_category = new Request.Builder(); //построитель запроса
-            Request request_category = builder_category.url("http://127.0.0.1:8000/category/")
-                    .get() //тип запроса
-                    .build();
-            try {
-                Response response = client.newCall(request_category).execute();
-                JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
-                ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject_category = jsonArray.getJSONObject(i);
-                    String nameCategory = jsonObject_category.getString("name"); //название категории
-                    HashMap<String, Object> map_category = new HashMap<>();
-                    map_category.put("nameCategory", nameCategory);
-                    list.add(map_category);
-                }
-                return list;
-            } catch (IOException e) {
-                Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
-                return new ArrayList<>(); // Возвращаем пустой список при ошибке
-            } catch (JSONException e) {
-                Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
-                return new ArrayList<>(); // Возвращаем пустой список при ошибке
-            } catch (Exception e) {
-                Log.e("MyAsyncTask", "Ошибка в doInBackground", e);
-                return null;
-            }
-        }
-        @Override
-        protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
-            super.onPostExecute(s);
-            String[] from_category = {"nameCategory"};
-            int to_category[] = {R.id.spinnerCategory};
-            //перенос значений к выпадающему списку
-            spinner = binding.spinnerCategory;
-            // Проверка на пустой список (необязательно, но рекомендуется)
-            if (s.isEmpty()) {
-                Toast.makeText(getContext(), "Нет данных", Toast.LENGTH_SHORT).show();
-                loadingAnimation.setVisibility(View.GONE);
-                // Остановите анимацию
-                loadingAnimation.clearAnimation();
-                return; // Предотвращаем дальнейшее выполнение, если список пуст
-            }
-            SimpleAdapter simpleAdapter_category = new SimpleAdapter(getContext().getApplicationContext(), s, android.R.layout.simple_spinner_item, from_category, to_category);
-            simpleAdapter_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //визуализация списка
-            spinner.setAdapter(simpleAdapter_category); //применяем адаптер к элементу spinner
-            loadingAnimation.setVisibility(View.GONE);
-            // Остановите анимацию
-            loadingAnimation.clearAnimation();
-        }
-    }
     //выпадающий список
     public class OkHTTPHandler_3 extends AsyncTask<Void,Void,ArrayList> {
         @Override
@@ -254,22 +207,24 @@ public class RecipesFragment extends Fragment {
             }
             //запрос для вывода категорий
             Request.Builder builder_category = new Request.Builder(); //построитель запроса
-            Request request_category = builder_category.url("https://fakestoreapi.com/products/categories")
+            Request request_category = builder_category.url("https://j41kw20c-8000.euw.devtunnels.ms/category/")
                     .get() //тип запроса
                     .build();
             try {
                 Response response = client.newCall(request_category).execute();
                 JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
                 ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
-                String name_all = "Всё"; //название категории "Все"
-                HashMap<String, Object> map_category = new HashMap<>();
-                map_category.put("nameCategory", name_all);
-                list.add(map_category);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("categoryName", "Всё");
+                list.add(map);
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    String nameCategory = jsonArray.getString(i); //название категории
-                    map_category = new HashMap<>();
-                    map_category.put("nameCategory", nameCategory);
-                    list.add(map_category);
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String id = jsonObject.getString("id"); //id категории
+                    String title = jsonObject.getString("name"); //название категории
+                    map = new HashMap<>();
+                    map.put("categoryId", id);
+                    map.put("categoryName", title);
+                    list.add(map);
                 }
                 return list;
             } catch (IOException e) {
@@ -286,7 +241,7 @@ public class RecipesFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList s) {
             super.onPostExecute(s);
-            String[] from_category = {"nameCategory"};
+            String[] from_category = {"categoryName"};
             int to_category[] = {R.id.spinnerCategory};
             if (s.isEmpty()) {
                 Toast.makeText(getContext(), "Нет данных", Toast.LENGTH_SHORT).show();
@@ -308,20 +263,20 @@ public class RecipesFragment extends Fragment {
                         return;
                     }
                     if (position == 0){
-                        url =  "https://fakestoreapi.com/products";
+                        url =  "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true?sort=created_at&page=1&size=50";
                         listView.setVisibility(View.GONE);
                         OkHTTPHandler handler = new OkHTTPHandler();
                         handler.execute();
                     }
                     else{
                         Map<?, ?> itemMap = (Map<?, ?>) parent.getItemAtPosition(position);
-                        String item = (String) itemMap.get("nameCategory");
+                        String item = (String) itemMap.get("categoryName");
                         //обработка случая, если ключ не найден или значение не является строкой
                         if (item == null) {
                             Log.e("Spinner", "Ключ не найден в Map, или значение не является строкой.");
                             return;
                         }
-                        url =  "https://fakestoreapi.com/products/category/" + item;
+                        url = "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true/category/?name=" + item + "&sort=created_at&page=1&size=50";
                         listView.setVisibility(View.GONE);
                         OkHTTPHandler handler = new OkHTTPHandler();
                         handler.execute();
