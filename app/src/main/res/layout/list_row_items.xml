@@ -1,164 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
     android:clickable="false"
+    android:descendantFocusability="blocksDescendants"
     android:focusable="false"
-    android:descendantFocusability="blocksDescendants">
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp"
+    android:paddingRight="5dp">
 
     <ImageView
         android:id="@+id/imageRecipe"
         android:layout_width="0dp"
-        android:layout_height="165dp"
+        android:layout_height="252dp"
         android:layout_margin="10dp"
         android:layout_marginTop="10dp"
-        android:scaleType="fitCenter"
+        android:clickable="false"
+        android:descendantFocusability="blocksDescendants"
+        android:focusable="false"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        android:clickable="false"
-        android:focusable="false"
-        android:descendantFocusability="blocksDescendants"/>
+        tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="148dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="34dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageRecipe"
         tools:ignore="MissingConstraints">
 
-        <TextView
-            android:id="@+id/textCategory"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Категории:"
-            android:textColor="#000000" />
+            android:divider="@drawable/bad_one"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/baseline_person_24" />
+
+                <TextView
+                    android:id="@+id/textAutor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
+                    android:paddingLeft="4dp"
+                    android:text="..."
+                    android:textAlignment="viewStart"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/baseline_calendar_month_24" />
+
+                <TextView
+                    android:id="@+id/textDataPublish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat"
+                    android:paddingLeft="4dp"
+                    android:text="..."
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:text="Название рецепта:"
-            android:textColor="#000000" />
+            android:fontFamily="@font/montserrat_medium"
+            android:text="..."
+            android:textColor="#000000"
+            android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/textAutor"
+            android:id="@+id/textCategory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:text="Автор:"
-            android:textColor="#000000" />
-
-        <TextView
-            android:id="@+id/textDataPublish"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Автор: Любитель вкусняшек"
-            android:textColor="#000000" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="74dp"
-        android:layout_margin="10dp"
-        android:layout_marginTop="22dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:id="@+id/linerLikes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/imageButtonLike"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="#00FFFFFF"
-                android:scaleType="centerInside"
-                android:src="@drawable/like" />
-
-            <TextView
-                android:id="@+id/textLikes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center|center_horizontal|center_vertical"
-                android:text="56"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linerDizlikes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/imageButtonDizLike"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="#00FFFFFF"
-                android:scaleType="centerInside"
-                android:src="@drawable/bad_one" />
-
-            <TextView
-                android:id="@+id/textViewDizlikes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center|center_horizontal|center_vertical"
-                android:text="3"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linerTime"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imageTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="#00FFFFFF"
-                android:scaleType="centerInside"
-                android:src="@drawable/timer" />
-
-            <TextView
-                android:id="@+id/textViewTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center|center_horizontal|center_vertical"
-                android:text="2 часа"
-                android:textColor="#000000" />
-        </LinearLayout>
+            android:fontFamily="@font/montserrat_medium"
+            android:text="..."
+            android:textColor="#EB5160"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
