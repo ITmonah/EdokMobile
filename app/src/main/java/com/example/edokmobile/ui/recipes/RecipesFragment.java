@@ -111,12 +111,6 @@ public class RecipesFragment extends Fragment {
                     String category = category_object.getString("name");
                     String price = jsonObject.getString("cooking_time"); //время приготовления рецепта
                     String img = "https://j41kw20c-8000.euw.devtunnels.ms/" + jsonObject.getString("face_img"); //картинка
-                    //URL img_url = new URL("https://j41kw20c-8000.euw.devtunnels.ms/" + img);
-
-//                    //
-//                    InputStream inputStream = img_url.openStream();
-//                    Bitmap image = BitmapFactory.decodeStream(inputStream);
-//                    BitmapDrawable drawable = new BitmapDrawable(getResources(), image); //преображение bitmap в drawable
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("recipeId", id);
                     map.put("recipeName", title);
@@ -143,11 +137,10 @@ public class RecipesFragment extends Fragment {
             String[] from = {"recipeName", "recipeCategory", "recipePrice","recipeImage"};
             int to[] = {R.id.textName,R.id.textCategory, R.id.textAutor,R.id.imageRecipe};
             SimpleAdapter simpleAdapter = new SimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
-            //определение, как SimpleAdapter должен устанавливать Drawable в ImageView
+            //определение для картинок
             simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
                 public boolean setViewValue(View view, Object data, String textRepresentation) {
-                    //if (view instanceof ImageView && data instanceof BitmapDrawable) {
                     if (view.getId() == R.id.imageRecipe) {
                         String imageUrl = data.toString();
                         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -161,17 +154,7 @@ public class RecipesFragment extends Fragment {
                         }
                         return true;
                     }
-                    return false; // Для других View не обрабатываем
-
-//                        Glide.with(getContext())
-//                                .load(data.toString()) //ссылка
-//                                .placeholder(R.drawable.group_23) // опционально, пока изображение загружается
-//                                .error(R.drawable.group_23) // опционально, если загрузка изображения не удалась
-//                                .into((ImageView) view);
-                        //((ImageView) view).setImageDrawable((BitmapDrawable) data);
-                       // return true;
-                    //}
-                    //return false;
+                    return false;
                 }
             });
             listView.setAdapter(simpleAdapter);
