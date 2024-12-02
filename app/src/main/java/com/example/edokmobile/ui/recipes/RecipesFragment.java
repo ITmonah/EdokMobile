@@ -1,11 +1,17 @@
 package com.example.edokmobile.ui.recipes;
 
+import static androidx.core.view.VelocityTrackerCompat.clear;
+import static java.util.Collections.addAll;
+
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +20,14 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.FilterQueryProvider;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +54,7 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -57,6 +69,7 @@ public class RecipesFragment extends Fragment {
     private ImageView loadingAnimation;
     private Spinner spinner;
     private TextView text_view;
+    private EditText searchText;
     String url = "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true?sort=created_at&page=1&size=50";
     boolean isFirstSelection = true; //флаг для отслеживания первого выбора
 
@@ -69,12 +82,13 @@ public class RecipesFragment extends Fragment {
         loadingAnimation = binding.loadingAnimation;
         spinner = binding.spinnerCategory;
         text_view = binding.textView7;
+        searchText = binding.searchText;
         spinner.setVisibility(View.GONE);
         text_view.setVisibility(View.GONE);
         OkHTTPHandler handler = new OkHTTPHandler();
-        OkHTTPHandler_3 handler3 = new OkHTTPHandler_3();
+        Category_list category_list = new Category_list();
         handler.execute();
-        handler3.execute();
+        category_list.execute();
         return root;
     }
     //ассинхронный поток
@@ -136,9 +150,32 @@ public class RecipesFragment extends Fragment {
             //сюда надо передавать значения
             String[] from = {"recipeName", "recipeCategory", "recipePrice","recipeImage"};
             int to[] = {R.id.textName,R.id.textCategory, R.id.textAutor,R.id.imageRecipe};
-            SimpleAdapter simpleAdapter = new SimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
+//            SimpleAdapter simpleAdapter = new SimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
+//            //определение для картинок
+//            simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+//                @Override
+//                public boolean setViewValue(View view, Object data, String textRepresentation) {
+//                    if (view.getId() == R.id.imageRecipe) {
+//                        String imageUrl = data.toString();
+//                        if (imageUrl != null && !imageUrl.isEmpty()) {
+//                            Glide.with(getContext())
+//                                    .load(imageUrl)
+//                                    .placeholder(R.drawable.group_23)
+//                                    .error(R.drawable.group_23)
+//                                    .into((ImageView) view);
+//                        } else {
+//                            ((ImageView) view).setImageResource(R.drawable.group_23);
+//                        }
+//                        return true;
+//                    }
+//                    return false;
+//                }
+//            });
+
+            //собственный адаптер
+            MySimpleAdapter adapter = new MySimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
             //определение для картинок
-            simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+            adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
                 public boolean setViewValue(View view, Object data, String textRepresentation) {
                     if (view.getId() == R.id.imageRecipe) {
@@ -157,10 +194,8 @@ public class RecipesFragment extends Fragment {
                     return false;
                 }
             });
-            listView.setAdapter(simpleAdapter);
-            loadingAnimation.setVisibility(View.GONE);
-            //остановка анимации
-            loadingAnimation.clearAnimation();
+            listView.setAdapter(adapter);
+            //listView.setAdapter(simpleAdapter);
             //открытие детального окна
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -172,6 +207,47 @@ public class RecipesFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            //если в текстовом поле есть текст, выполняем фильтрацию
+            if(!searchText.getText().toString().isEmpty())
+                adapter.getFilter().filter(searchText.getText().toString());
+            //установка слушателя изменения текста
+            searchText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) { }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                //при изменении текста выполняем фильтрацию
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    adapter.getFilter().filter(s.toString());
+                }
+            });
+            //взаимодействие со списком
+            AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (isFirstSelection) {
+                        isFirstSelection = false;
+                        return;
+                    }
+                    if (position == 0){
+                        adapter.getFilter();
+                    }
+                    else{
+                        Map<?, ?> itemMap = (Map<?, ?>) parent.getItemAtPosition(position);
+                        String item = (String) itemMap.get("categoryName");
+                        //обработка случая, если ключ не найден или значение не является строкой
+                        if (item == null) {
+                            Log.e("Spinner", "Ключ не найден в Map, или значение не является строкой.");
+                            return;
+                        }
+                        adapter.getFilter().filter(item);
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            };
+            spinner.setOnItemSelectedListener(itemSelectedListener);
             loadingAnimation.setVisibility(View.GONE);
             //остановка анимации
             loadingAnimation.clearAnimation();
@@ -185,7 +261,17 @@ public class RecipesFragment extends Fragment {
         }
     }
     //выпадающий список
-    public class OkHTTPHandler_3 extends AsyncTask<Void,Void,ArrayList> {
+    public class Category_list extends AsyncTask<Void,Void,ArrayList> {
+        //запуск экрана загрузки
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            AlphaAnimation animation = new AlphaAnimation(1f, 0f);
+            animation.setDuration(750); //длительность анимации в миллисекундах
+            animation.setRepeatCount(Animation.INFINITE); //повторять бесконечно
+            animation.setRepeatMode(Animation.REVERSE); //переключать между видим и невидимым
+            loadingAnimation.startAnimation(animation);
+        }
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
             if ( isCancelled()){
@@ -240,39 +326,80 @@ public class RecipesFragment extends Fragment {
                 return;
             }
             spinner.setAdapter(simpleAdapter_category);
-            //взаимодействие со списком
-            AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            loadingAnimation.setVisibility(View.GONE);
+            //остановка анимации
+            loadingAnimation.clearAnimation();
+        }
+    }
+
+    public class MySimpleAdapter extends SimpleAdapter {
+        private List<Map<String, ?>> originalData;
+        private List<Map<String, ?>> filteredData;
+        public MySimpleAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
+            super(context, data, resource, from, to);
+            this.originalData = new ArrayList<>(data);
+            this.filteredData = new ArrayList<>(data);
+        }
+        @Override
+        public int getCount() {
+            return filteredData.size(); //возвращаем размер отфильтрованного списка
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return filteredData.get(position); //возвращаем элемент из отфильтрованного списка
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position; //или любой другой подходящий идентификатор
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //используется filteredData
+            return super.getView(position, convertView, parent);
+        }
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (isFirstSelection) {
-                        isFirstSelection = false;
-                        return;
-                    }
-                    if (position == 0){
-                        url =  "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true?sort=created_at&page=1&size=50";
-                        listView.setVisibility(View.GONE);
-                        OkHTTPHandler handler = new OkHTTPHandler();
-                        handler.execute();
-                    }
-                    else{
-                        Map<?, ?> itemMap = (Map<?, ?>) parent.getItemAtPosition(position);
-                        String item = (String) itemMap.get("categoryName");
-                        //обработка случая, если ключ не найден или значение не является строкой
-                        if (item == null) {
-                            Log.e("Spinner", "Ключ не найден в Map, или значение не является строкой.");
-                            return;
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults results = new FilterResults();
+                    if (constraint == null || constraint.length() == 0) {
+                        results.values = originalData; //восстанавливаем исходный список
+                        results.count = originalData.size();
+                    } else {
+                        String filterString = constraint.toString().toLowerCase();
+                        List<Map<String, ?>> filteredList = new ArrayList<>();
+                        for (Map<String, ?> item : originalData) {
+                            boolean matched = false;
+                            String[] from = {"recipeName"};
+                            for (String key : from) {
+                                if (item.containsKey(key)) { //Проверка на существование ключа
+                                    String value = item.get(key).toString().toLowerCase();
+                                    if (value.contains(filterString)) {
+                                        matched = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (matched) {
+                                filteredList.add(item);
+                            }
                         }
-                        url = "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true/category/?name=" + item + "&sort=created_at&page=1&size=50";
-                        listView.setVisibility(View.GONE);
-                        OkHTTPHandler handler = new OkHTTPHandler();
-                        handler.execute();
+                        results.values = filteredList;
+                        results.count = filteredList.size();
                     }
+                    return results;
                 }
+
+                @SuppressWarnings("unchecked")
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    filteredData = (List<Map<String, ?>>) results.values;
+                    notifyDataSetChanged(); //обновляем адаптер
                 }
             };
-            spinner.setOnItemSelectedListener(itemSelectedListener);
         }
     }
 //    @Override

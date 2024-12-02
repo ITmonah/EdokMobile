@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -24,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.edokmobile.ui.recipes.RecipesFragment;
@@ -140,6 +142,13 @@ public class DetailedActivity extends AppCompatActivity {
                         .into(detailImage);
             }
             stepList.setAdapter(simpleAdapter);
+            //отключение прокрутки
+            stepList.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return false;
+                }
+            });
         }
     }
 
