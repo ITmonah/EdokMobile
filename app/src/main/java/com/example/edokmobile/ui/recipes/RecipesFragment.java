@@ -20,6 +20,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.FilterQueryProvider;
@@ -59,6 +60,7 @@ import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RecipesFragment extends Fragment {
@@ -71,6 +73,7 @@ public class RecipesFragment extends Fragment {
     private TextView text_view;
     private EditText searchText;
     String url = "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true?sort=created_at&page=1&size=50";
+    String item;
     boolean isFirstSelection = true; //флаг для отслеживания первого выбора
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -147,55 +150,13 @@ public class RecipesFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
-            //сюда надо передавать значения
+            //передача значений
             String[] from = {"recipeName", "recipeCategory", "recipePrice","recipeImage"};
             int to[] = {R.id.textName,R.id.textCategory, R.id.textAutor,R.id.imageRecipe};
-//            SimpleAdapter simpleAdapter = new SimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
-//            //определение для картинок
-//            simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-//                @Override
-//                public boolean setViewValue(View view, Object data, String textRepresentation) {
-//                    if (view.getId() == R.id.imageRecipe) {
-//                        String imageUrl = data.toString();
-//                        if (imageUrl != null && !imageUrl.isEmpty()) {
-//                            Glide.with(getContext())
-//                                    .load(imageUrl)
-//                                    .placeholder(R.drawable.group_23)
-//                                    .error(R.drawable.group_23)
-//                                    .into((ImageView) view);
-//                        } else {
-//                            ((ImageView) view).setImageResource(R.drawable.group_23);
-//                        }
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//            });
 
-            //собственный адаптер
+            //установка собственного адаптера
             MySimpleAdapter adapter = new MySimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
-            //определение для картинок
-            adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-                @Override
-                public boolean setViewValue(View view, Object data, String textRepresentation) {
-                    if (view.getId() == R.id.imageRecipe) {
-                        String imageUrl = data.toString();
-                        if (imageUrl != null && !imageUrl.isEmpty()) {
-                            Glide.with(getContext())
-                                    .load(imageUrl)
-                                    .placeholder(R.drawable.group_23)
-                                    .error(R.drawable.group_23)
-                                    .into((ImageView) view);
-                        } else {
-                            ((ImageView) view).setImageResource(R.drawable.group_23);
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            });
-            listView.setAdapter(adapter);
-            //listView.setAdapter(simpleAdapter);
+
             //открытие детального окна
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -207,20 +168,7 @@ public class RecipesFragment extends Fragment {
                     startActivity(intent);
                 }
             });
-
-            //если в текстовом поле есть текст, выполняем фильтрацию
-            if(!searchText.getText().toString().isEmpty())
-                adapter.getFilter().filter(searchText.getText().toString());
-            //установка слушателя изменения текста
-            searchText.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) { }
-
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                //при изменении текста выполняем фильтрацию
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    adapter.getFilter().filter(s.toString());
-                }
-            });
+            
             //взаимодействие со списком
             AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -229,25 +177,44 @@ public class RecipesFragment extends Fragment {
                         isFirstSelection = false;
                         return;
                     }
-                    if (position == 0){
-                        adapter.getFilter();
-                    }
-                    else{
                         Map<?, ?> itemMap = (Map<?, ?>) parent.getItemAtPosition(position);
-                        String item = (String) itemMap.get("categoryName");
+                        item = (String) itemMap.get("categoryName");
                         //обработка случая, если ключ не найден или значение не является строкой
                         if (item == null) {
                             Log.e("Spinner", "Ключ не найден в Map, или значение не является строкой.");
                             return;
                         }
-                        adapter.getFilter().filter(item);
+                        String text1 = searchText.getText().toString(); //текст из строки поиска
+                        String text2 = item; //текст из категории
+                        adapter.setFilterParams(text1, "recipeName", text2, "recipeCategory");
                     }
-                }
+
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             };
+
+            //установка слушателя изменения текста
+            searchText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) { }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String text1 = s.toString(); //текст из строки поиска
+                    String text2 = item; //текст из категории
+                    if (text2==null || text2 ==""){
+                        text2= "Всё";
+                    }
+                    adapter.setFilterParams(text1, "recipeName", text2, "recipeCategory");
+                }
+            });
+
             spinner.setOnItemSelectedListener(itemSelectedListener);
+
+            //установка адаптера
+            listView.setAdapter(adapter);
+
             loadingAnimation.setVisibility(View.GONE);
             //остановка анимации
             loadingAnimation.clearAnimation();
@@ -332,76 +299,124 @@ public class RecipesFragment extends Fragment {
         }
     }
 
-    public class MySimpleAdapter extends SimpleAdapter {
+    //собственный адаптер для рецептов
+    public class MySimpleAdapter extends BaseAdapter {
+        private List<Map<String, ?>> data;
         private List<Map<String, ?>> originalData;
-        private List<Map<String, ?>> filteredData;
-        public MySimpleAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
-            super(context, data, resource, from, to);
+        private String filterKey1;
+        private String filterKey2;
+        private String filterValue1;
+        private String filterValue2;
+        private int resource; // Ваш layout для одной строки
+        private String[] from;
+        private int[] to;
+
+        public MySimpleAdapter(Context context, List<Map<String, ?>> data, int resource, String[] from, int[] to) {
+            this.data = data;
             this.originalData = new ArrayList<>(data);
-            this.filteredData = new ArrayList<>(data);
+            this.resource = resource;
+            this.from = from;
+            this.to = to;
         }
+
+        public void setFilterParams(String value1, String key1, String value2, String key2) {
+            filterValue1 = value1;
+            filterKey1 = key1;
+            filterValue2 = value2;
+            filterKey2 = key2;
+            filterData();
+            notifyDataSetChanged(); // Важно
+        }
+
+        private void filterData() {
+            List<Map<String, ?>> filteredList = new ArrayList<>();
+
+            if (filterValue1 == null || filterValue1.isEmpty()) {
+                if (filterValue2 == null || filterValue2.isEmpty() || filterValue2.equals("Всё")) {
+                    //оба фильтра пусты - выводим все
+                    filteredList.addAll(originalData);
+                } else {
+                    //задана ТОЛЬКО категория
+                    for (Map<String, ?> item : originalData) {
+                        if (item.containsKey(filterKey2) && item.get(filterKey2).toString().toLowerCase().contains(filterValue2.toLowerCase())) {
+                            filteredList.add(item);
+                        }
+                    }
+                }
+            } else { //поиск не пустой
+                if (filterValue2 == null || filterValue2.isEmpty() || filterValue2.equals("Всё")) {
+                    //задан ТОЛЬКО поиск
+                    for (Map<String, ?> item : originalData) {
+                        if (item.containsKey(filterKey1) && item.get(filterKey1).toString().toLowerCase().contains(filterValue1.toLowerCase())) {
+                            filteredList.add(item);
+                        }
+                    }
+                } else {
+                    //заданы оба фильтра
+                    for (Map<String, ?> item : originalData) {
+                        if (item.containsKey(filterKey1) && item.get(filterKey1).toString().toLowerCase().contains(filterValue1.toLowerCase()) &&
+                                item.containsKey(filterKey2) && item.get(filterKey2).toString().toLowerCase().contains(filterValue2.toLowerCase())) {
+                            filteredList.add(item);
+                        }
+                    }
+                }
+            }
+            data = filteredList;
+        }
+
         @Override
         public int getCount() {
-            return filteredData.size(); //возвращаем размер отфильтрованного списка
+            return data.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return filteredData.get(position); //возвращаем элемент из отфильтрованного списка
+            return data.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return position; //или любой другой подходящий идентификатор
+            return position;
         }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            //используется filteredData
-            return super.getView(position, convertView, parent);
-        }
-        @Override
-        public Filter getFilter() {
-            return new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults results = new FilterResults();
-                    if (constraint == null || constraint.length() == 0) {
-                        results.values = originalData; //восстанавливаем исходный список
-                        results.count = originalData.size();
-                    } else {
-                        String filterString = constraint.toString().toLowerCase();
-                        List<Map<String, ?>> filteredList = new ArrayList<>();
-                        for (Map<String, ?> item : originalData) {
-                            boolean matched = false;
-                            String[] from = {"recipeName"};
-                            for (String key : from) {
-                                if (item.containsKey(key)) { //Проверка на существование ключа
-                                    String value = item.get(key).toString().toLowerCase();
-                                    if (value.contains(filterString)) {
-                                        matched = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (matched) {
-                                filteredList.add(item);
-                            }
-                        }
-                        results.values = filteredList;
-                        results.count = filteredList.size();
-                    }
-                    return results;
-                }
+            View view = convertView;
+            if (view == null) {
+                LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(resource, null);
+            }
 
-                @SuppressWarnings("unchecked")
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    filteredData = (List<Map<String, ?>>) results.values;
-                    notifyDataSetChanged(); //обновляем адаптер
+            Map<String, ?> item = data.get(position);
+            for (int i = 0; i < from.length; i++) {
+                int viewId = to[i];
+                View itemView = view.findViewById(viewId);
+                Object data = item.get(from[i]);
+
+                if (itemView instanceof TextView) {
+                    ((TextView) itemView).setText(data != null ? data.toString() : "");
                 }
-            };
+                else if (itemView instanceof ImageView && viewId == R.id.imageRecipe) { //обработка ImageView
+                    String imageUrl = data != null ? data.toString() : "";
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Glide.with(parent.getContext())
+                                .load(imageUrl)
+                                .placeholder(R.drawable.group_23)
+                                .error(R.drawable.group_23)
+                                .into((ImageView) itemView);
+                    }
+                    else {
+                        ((ImageView) itemView).setImageResource(R.drawable.group_23);
+                    }
+                }
+                else {
+                    //обработка других типов View, если необходимо
+                }
+            }
+            return view;
         }
     }
+
 //    @Override
 //    public void onDestroyView() {
 //        super.onDestroyView();
