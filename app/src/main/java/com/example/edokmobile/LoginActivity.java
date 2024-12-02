@@ -56,12 +56,8 @@ public class LoginActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                 if (account != null) {
-                    String name = account.getDisplayName();
-                    String email = account.getEmail();
-                    Toast toast_acc = Toast.makeText(getApplicationContext(), "Привет, " + name + "(" + email + ")", Toast.LENGTH_LONG);
-                    toast_acc.show();
                     ((MyApplication) getApplicationContext()).setSomeVariable(account);
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(),PasswordActivity.class);
                     startActivity(intent);
                 }
             } catch (ApiException e) {
