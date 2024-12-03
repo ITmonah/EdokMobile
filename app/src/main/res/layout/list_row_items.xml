@@ -18,7 +18,6 @@
         android:layout_margin="10dp"
         android:layout_marginTop="10dp"
         android:clickable="false"
-        android:descendantFocusability="blocksDescendants"
         android:focusable="false"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background"
@@ -56,6 +55,11 @@
                     android:id="@+id/imageView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:scaleX="1.4"
+                    android:scaleY="1.4"
                     app:srcCompat="@drawable/baseline_person_24" />
 
                 <TextView
@@ -79,7 +83,10 @@
                     android:id="@+id/imageView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/baseline_calendar_month_24" />
+                    android:scaleType="fitCenter"
+                    android:scaleX="1.1"
+                    android:scaleY="1.1"
+                    app:srcCompat="@drawable/timer" />
 
                 <TextView
                     android:id="@+id/textDataPublish"
