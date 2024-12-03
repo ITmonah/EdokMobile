@@ -72,7 +72,7 @@ public class RecipesFragment extends Fragment {
     private Spinner spinner;
     private TextView text_view;
     private EditText searchText;
-    String url = "https://j41kw20c-8000.euw.devtunnels.ms/recipe/page/true?sort=created_at&page=1&size=50";
+    String url;
     String item;
     boolean isFirstSelection = true; //флаг для отслеживания первого выбора
 
@@ -88,6 +88,7 @@ public class RecipesFragment extends Fragment {
         searchText = binding.searchText;
         spinner.setVisibility(View.GONE);
         text_view.setVisibility(View.GONE);
+        url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
         OkHTTPHandler handler = new OkHTTPHandler();
         Category_list category_list = new Category_list();
         handler.execute();
@@ -112,7 +113,7 @@ public class RecipesFragment extends Fragment {
                 return null;
             }
             Request.Builder builder = new Request.Builder(); //построитель запроса
-            Request request = builder.url(url)
+            Request request = builder.url(url + "recipe/page/true?sort=created_at&page=1&size=50")
                     .get() //тип запроса
                     .build();
             try {
@@ -127,7 +128,7 @@ public class RecipesFragment extends Fragment {
                     JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
                     String category = category_object.getString("name");
                     String price = jsonObject.getString("cooking_time"); //время приготовления рецепта
-                    String img = "https://j41kw20c-8000.euw.devtunnels.ms/" + jsonObject.getString("face_img"); //картинка
+                    String img = url + jsonObject.getString("face_img"); //картинка
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("recipeId", id);
                     map.put("recipeName", title);
@@ -246,7 +247,7 @@ public class RecipesFragment extends Fragment {
             }
             //запрос для вывода категорий
             Request.Builder builder_category = new Request.Builder(); //построитель запроса
-            Request request_category = builder_category.url("https://j41kw20c-8000.euw.devtunnels.ms/category/")
+            Request request_category = builder_category.url(url +"category/")
                     .get() //тип запроса
                     .build();
             try {

@@ -56,6 +56,7 @@ public class DetailedActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private ListView stepList;
     String recipe_id;
+    String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +74,7 @@ public class DetailedActivity extends AppCompatActivity {
         detailImage = findViewById(R.id.detailImage);
         linearLayout = findViewById(R.id.main);
         stepList = findViewById(R.id.stepList);
+        url = ((MyApplication) getApplication()).getGlobalUrl();
         Intent intent = getIntent();
         recipe_id = intent.getStringExtra("recipe");
         OkHTTPHandler handler = new OkHTTPHandler();
@@ -84,7 +86,7 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
             Request.Builder builder = new Request.Builder(); //построитель запроса
-            Request request = builder.url("https://j41kw20c-8000.euw.devtunnels.ms/recipe/" + recipe_id)
+            Request request = builder.url(url + "recipe/" + recipe_id)
                     .get() //тип запроса
                     .build();
             try {
@@ -96,7 +98,7 @@ public class DetailedActivity extends AppCompatActivity {
                 String category = category_object.getString("name");
                 JSONObject autor_object = jsonObject.getJSONObject("user"); //автор рецепта
                 String autor = autor_object.getString("name");
-                String img = "https://j41kw20c-8000.euw.devtunnels.ms/" + jsonObject.getString("face_img"); //картинка
+                String img = url + jsonObject.getString("face_img"); //картинка
                 JSONArray steps_array = jsonObject.getJSONArray("steps"); //шаги рецепта
                 for (int i = 0; i < steps_array.length(); i++) {
                     JSONObject jsonObject_step = steps_array.getJSONObject(i);

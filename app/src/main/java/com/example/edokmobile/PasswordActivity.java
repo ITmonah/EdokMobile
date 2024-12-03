@@ -37,12 +37,13 @@ public class PasswordActivity extends AppCompatActivity {
     private Button next_btn;
     private EditText password_input;
     protected OkHttpClient client = new OkHttpClient();
+    String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_password);
-
+        url = ((MyApplication) getApplication()).getGlobalUrl();
         next_btn = findViewById(R.id.next_btn);
         password_input = findViewById(R.id.PasswordInput);
         next_btn.setOnClickListener(new View.OnClickListener() {
@@ -54,8 +55,10 @@ public class PasswordActivity extends AppCompatActivity {
                 }
                 else {
                     if (password_input.getText().toString().trim().length() > 3 && password_input.getText().toString().trim().length() <= 20){
-                        OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
-                        okHTTPHandler.execute();
+                        //OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
+                        //okHTTPHandler.execute();
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(intent);
                     }
                     else {
                         Toast toast_acc = Toast.makeText(getApplicationContext(), "Пароль слишком длинный/короткий", Toast.LENGTH_SHORT);
@@ -80,7 +83,7 @@ public class PasswordActivity extends AppCompatActivity {
                 jo.put("password", password_input.getText().toString().trim());
                 RequestBody formBody = RequestBody.create(JSON, String.valueOf(jo));
                 Request.Builder builder = new Request.Builder(); //построитель запроса
-                Request request = builder.url("https://j41kw20c-8000.euw.devtunnels.ms/user/reg")
+                Request request = builder.url(url + "user/reg")
                         .post(formBody) //тип запроса
                         .build();
                 Response response = client.newCall(request).execute();
