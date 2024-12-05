@@ -25,7 +25,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
         android:clickable="true"
-        android:divider="#000000"
         android:dividerHeight="3dp"
         android:focusable="true"
         android:padding="5dp"

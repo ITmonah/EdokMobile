@@ -10,6 +10,7 @@ public class MyApplication extends Application {
 
     private GoogleSignInAccount account;
     protected OkHttpClient client = new OkHttpClient();
+    private String url = "https://s3q9h0g4-8000.euw.devtunnels.ms/";
 
     public GoogleSignInAccount getSomeVariable() {
         return account;
@@ -21,6 +22,10 @@ public class MyApplication extends Application {
 
     public OkHttpClient getClient() {
         return client;
+    }
+
+    public String getGlobalUrl() {
+        return url;
     }
 
 }
