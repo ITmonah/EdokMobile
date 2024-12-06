@@ -127,13 +127,16 @@ public class RecipesFragment extends Fragment {
                     String title = jsonObject.getString("name"); //название рецепта
                     JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
                     String category = category_object.getString("name");
-                    String price = jsonObject.getString("cooking_time"); //время приготовления рецепта
+                    JSONObject autor_object = jsonObject.getJSONObject("user"); //автор рецепта
+                    String autor = autor_object.getString("name");
+                    String cooking_time = jsonObject.getString("cooking_time"); //время приготовления рецепта
                     String img = url + jsonObject.getString("face_img"); //картинка
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("recipeId", id);
                     map.put("recipeName", title);
+                    map.put("recipeAutor", autor);
                     map.put("recipeCategory", "Категория: " + category);
-                    map.put("recipePrice", "Время готовки: " + price);
+                    map.put("recipeCookingTime", cooking_time + "мин.");
                     map.put("recipeImage", img);
                     list.add(map);
                 }
@@ -152,8 +155,8 @@ public class RecipesFragment extends Fragment {
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
             //передача значений
-            String[] from = {"recipeName", "recipeCategory", "recipePrice","recipeImage"};
-            int to[] = {R.id.textName,R.id.textCategory, R.id.textAutor,R.id.imageRecipe};
+            String[] from = {"recipeName", "recipeCategory", "recipeAutor","recipeCookingTime", "recipeImage"};
+            int to[] = {R.id.textName,R.id.textCategory, R.id.textAutor,R.id.textDataPublish,R.id.imageRecipe};
 
             //установка собственного адаптера
             MySimpleAdapter adapter = new MySimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);
