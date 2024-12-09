@@ -1,7 +1,9 @@
 package com.example.edokmobile.ui.home;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
@@ -130,6 +133,7 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(s);
             LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
             topRecipes.setLayoutManager(layoutManager);
+            topRecipes.addItemDecoration(new ThirdWidthItemDecoration()); // Добавляем декоратор
             topRecipes.setAdapter(new MyRecyclerViewAdapter(s));
 
             //остановка анимации
@@ -198,6 +202,7 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(s);
             LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
             topUsers.setLayoutManager(layoutManager);
+            topUsers.addItemDecoration(new ThirdWidthItemDecoration()); // Добавляем декоратор
             topUsers.setAdapter(new MyRecyclerViewAdapter(s));
 
             //остановка анимации
@@ -243,6 +248,28 @@ public class HomeFragment extends Fragment {
             } else {
                 holder.imageTop.setImageResource(R.drawable.group_23); // Заполнитель
             }
+            //установка ширины каждого элемента
+            ViewTreeObserver vto = holder.itemView.getRootView().getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int totalWidth = holder.itemView.getRootView().getWidth();
+                    int itemCount = getItemCount();
+                    int widthPerItem = totalWidth / itemCount;
+
+                    ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                    if (params == null) {
+                        params = new ViewGroup.LayoutParams(widthPerItem, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    } else {
+                        params.width = widthPerItem;
+                    }
+                    holder.itemView.setLayoutParams(params);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        holder.itemView.getRootView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                }
+            });
         }
 
         @Override
@@ -261,6 +288,27 @@ public class HomeFragment extends Fragment {
                 textViewRaiting = itemView.findViewById(R.id.textViewRaiting);
                 imageTop = itemView.findViewById(R.id.imageTop);
             }
+        }
+    }
+
+    //создание класса для динамического рассчитывания ширины элемента в зависимости от ширины экрана
+    public class ThirdWidthItemDecoration extends RecyclerView.ItemDecoration {
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view);
+            if (position == RecyclerView.NO_POSITION) return;
+
+            int itemCount = state.getItemCount();
+            if (itemCount <= 0) return;
+
+            int totalWidth = parent.getWidth();
+            int spacing = totalWidth % itemCount; // Остаток ширины
+
+            int leftSpacing = (position > 0) ? spacing / itemCount : 0;
+            int rightSpacing = (position < itemCount - 1) ? spacing / itemCount : 0;
+
+            outRect.left = leftSpacing;
+            outRect.right = rightSpacing;
         }
     }
 
