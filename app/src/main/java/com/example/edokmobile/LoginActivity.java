@@ -43,10 +43,10 @@ public class LoginActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = gsc.getSignInIntent();
-                //GoogleSignInLauncher.launch(intent);
-                Intent intent = new Intent(getApplicationContext(),PasswordActivity.class);
-                startActivity(intent);
+                Intent intent = gsc.getSignInIntent();
+                GoogleSignInLauncher.launch(intent);
+                //Intent intent = new Intent(getApplicationContext(),PasswordActivity.class);
+                //startActivity(intent);
             }
         });
     }
