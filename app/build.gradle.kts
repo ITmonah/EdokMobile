@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.core:core:1.12.0") //для нового скролла
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation("androidx.credentials:credentials:1.5.0-alpha05")
     implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha05")

@@ -88,6 +88,7 @@ public class RecipesFragment extends Fragment {
         searchText = binding.searchText;
         spinner.setVisibility(View.GONE);
         text_view.setVisibility(View.GONE);
+        searchText.setVisibility(View.GONE);
         url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
         OkHTTPHandler handler = new OkHTTPHandler();
         Category_list category_list = new Category_list();
@@ -223,6 +224,7 @@ public class RecipesFragment extends Fragment {
             //остановка анимации
             loadingAnimation.clearAnimation();
             spinner.setVisibility(View.VISIBLE);
+            searchText.setVisibility(View.VISIBLE);
             text_view.setVisibility(View.VISIBLE);
             listView.setVisibility(View.VISIBLE);
         }

@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView topUsers;
     private RecyclerView topRecipes;
     private FrameLayout frameLayout;
+    private LinearLayout linearLayout;
     String url;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,11 +68,11 @@ public class HomeFragment extends Fragment {
 
         loadingAnimation = binding.loadingAnimation;
         frameLayout = binding.frameEdok;
+        linearLayout = binding.linerEdok;
         topUsers = binding.topUsers; //топ 3 пользователей
         topRecipes = binding.topRecipes; //топ 3 рецептов
-        topUsers.setVisibility(View.GONE);
-        topRecipes.setVisibility(View.GONE);
         frameLayout.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.GONE);
         url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
         TopRecipes handler_recipes = new TopRecipes();
         handler_recipes.execute();
@@ -140,7 +142,7 @@ public class HomeFragment extends Fragment {
             loadingAnimation.setVisibility(View.GONE);
             loadingAnimation.clearAnimation();
             frameLayout.setVisibility(View.VISIBLE);
-            topRecipes.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.VISIBLE);
         }
         @Override
         protected void onCancelled() {
@@ -209,7 +211,7 @@ public class HomeFragment extends Fragment {
             loadingAnimation.setVisibility(View.GONE);
             loadingAnimation.clearAnimation();
             frameLayout.setVisibility(View.VISIBLE);
-            topUsers.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.VISIBLE);
         }
         @Override
         protected void onCancelled() {
@@ -302,7 +304,7 @@ public class HomeFragment extends Fragment {
             if (itemCount <= 0) return;
 
             int totalWidth = parent.getWidth();
-            int spacing = totalWidth % itemCount; // Остаток ширины
+            int spacing = totalWidth % itemCount; //остаток ширины
 
             int leftSpacing = (position > 0) ? spacing / itemCount : 0;
             int rightSpacing = (position < itemCount - 1) ? spacing / itemCount : 0;
