@@ -20,18 +20,6 @@
             android:orientation="vertical"
             tools:context=".DetailedActivity">
 
-
-            <TextView
-                android:id="@+id/detailName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="14dp"
-                android:gravity="center"
-                android:textColor="#F42A48"
-                android:textSize="24sp"
-                android:textStyle="bold">
-            </TextView>
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -47,7 +35,9 @@
                     android:text="..."
                     android:textColor="#FFFFFF"
                     android:textSize="24sp"
-                    android:textStyle="bold"></TextView>
+                    android:textStyle="bold">
+                </TextView>
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
