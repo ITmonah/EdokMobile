@@ -1,13 +1,7 @@
 package com.example.edokmobile.ui.recipes;
 
-import static androidx.core.view.VelocityTrackerCompat.clear;
-import static java.util.Collections.addAll;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,16 +13,11 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.FilterQueryProvider;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,21 +27,15 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.edokmobile.DetailedActivity;
-import com.example.edokmobile.MainActivity;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentRecipesBinding;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +43,6 @@ import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RecipesFragment extends Fragment {
@@ -157,7 +139,7 @@ public class RecipesFragment extends Fragment {
             super.onPostExecute(s);
             //передача значений
             String[] from = {"recipeName", "recipeCategory", "recipeAutor","recipeCookingTime", "recipeImage"};
-            int to[] = {R.id.textName,R.id.textCategory, R.id.textAutor,R.id.textDataPublish,R.id.imageRecipe};
+            int to[] = {R.id.textName,R.id.textCategory, R.id.detailPrice,R.id.textDataPublish,R.id.imageRecipe};
 
             //установка собственного адаптера
             MySimpleAdapter adapter = new MySimpleAdapter(requireContext().getApplicationContext(), s, R.layout.list_row_items, from, to);

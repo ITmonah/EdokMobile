@@ -3,6 +3,7 @@
     android:id="@+id/stepText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:fontFamily="@font/montserrat"
     android:padding="10dp"
-    android:textColor="#F42A48"
-    android:textSize="16sp" />
+    android:textColor="@color/black"
+    android:textSize="18sp" />
