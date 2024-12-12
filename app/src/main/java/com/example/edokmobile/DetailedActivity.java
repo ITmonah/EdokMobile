@@ -55,6 +55,7 @@ public class DetailedActivity extends AppCompatActivity {
     private ImageView detailImage;
     private LinearLayout linearLayout;
     private ListView stepList;
+    private TextView steps;
     String recipe_id;
     String url;
     @Override
@@ -73,7 +74,8 @@ public class DetailedActivity extends AppCompatActivity {
         detailPrice = findViewById(R.id.detailPrice);
         detailImage = findViewById(R.id.detailImage);
         linearLayout = findViewById(R.id.main);
-        stepList = findViewById(R.id.stepList);
+        steps = findViewById(R.id.detailDes3);
+        //stepList = findViewById(R.id.stepList);
         url = ((MyApplication) getApplication()).getGlobalUrl();
         Intent intent = getIntent();
         recipe_id = intent.getStringExtra("recipe");
@@ -137,20 +139,26 @@ public class DetailedActivity extends AppCompatActivity {
                 detailName.setText((String) recipe.get("recipeName"));
                 detailDes.setText((String) recipe.get("recipeCategory"));
                 detailPrice.setText((String) recipe.get("recipeAutor"));
+                String stepsArr = "";
+                for (int i = 0; i < filteredList.size(); i++) {
+                    stepsArr += i+1 + "." + filteredList.get(i).get("stepInfo") + "\n\n";
+                }
+                stepsArr += "Приятного аппетита!";
+                steps.setText(stepsArr);
                 Glide.with(getApplicationContext())
                         .load(recipe.get("recipeImage"))
                         .placeholder(R.drawable.like)
                         .error(R.drawable.group_23)
                         .into(detailImage);
             }
-            stepList.setAdapter(simpleAdapter);
+            //stepList.setAdapter(simpleAdapter);
             //отключение прокрутки
-            stepList.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    return false;
-                }
-            });
+//            stepList.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View view, MotionEvent motionEvent) {
+//                    return false;
+//                }
+//            });
         }
     }
 

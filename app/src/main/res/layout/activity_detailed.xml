@@ -149,17 +149,16 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-
-            <ListView
-                android:id="@+id/stepList"
+            <TextView
+                android:id="@+id/detailDes3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
-                android:layout_weight="1"
-                android:clickable="false"
-                android:descendantFocusability="blocksDescendants"
-                android:focusable="false" />
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
 
         </LinearLayout>
     </ScrollView>
