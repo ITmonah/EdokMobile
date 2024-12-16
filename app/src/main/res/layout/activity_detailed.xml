@@ -17,11 +17,10 @@
         <LinearLayout
             android:id="@+id/main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="10dp"
             tools:context=".DetailedActivity">
-
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -41,7 +40,9 @@
                     android:text="..."
                     android:textColor="#FFFFFF"
                     android:textSize="24sp"
-                    android:textStyle="bold"></TextView>
+                    android:textStyle="bold">
+                </TextView>
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -261,7 +262,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/detailDes2"
+                        android:id="@+id/textIngredients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
