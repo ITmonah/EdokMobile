@@ -276,6 +276,8 @@ public class HomeFragment extends Fragment {
             if (imageObject instanceof String) {
                 Glide.with(holder.imageTop.getContext())
                         .load((String) imageObject)
+                        .placeholder(R.drawable.baseline_wallpaper_24)
+                        .error(R.drawable.group_23)
                         .into(holder.imageTop);
             } else {
                 holder.imageTop.setImageResource(R.drawable.group_23); // Заполнитель

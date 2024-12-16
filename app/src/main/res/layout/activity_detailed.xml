@@ -213,6 +213,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="6dp"
                         android:fontFamily="@font/montserrat"
+                        android:text="..."
                         android:textColor="#000000"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -270,7 +271,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="6dp"
                         android:fontFamily="@font/montserrat"
-                        android:text="Лолка Лолка 60г.\nЛолка Лолка 60г.\nЛолка Лолка 60г."
+                        android:text="..."
                         android:textColor="#2E2E2E"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -327,6 +328,7 @@
                         android:layout_marginTop="6dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/montserrat"
+                        android:text="..."
                         android:textColor="#2E2E2E"
                         android:textSize="18sp" />
 

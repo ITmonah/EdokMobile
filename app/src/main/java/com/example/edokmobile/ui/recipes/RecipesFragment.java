@@ -418,7 +418,7 @@ public class RecipesFragment extends Fragment {
                     if (imageUrl != null && !imageUrl.isEmpty()) {
                         Glide.with(parent.getContext())
                                 .load(imageUrl)
-                                .placeholder(R.drawable.group_23)
+                                .placeholder(R.drawable.baseline_wallpaper_24)
                                 .error(R.drawable.group_23)
                                 .into((ImageView) itemView);
                     }

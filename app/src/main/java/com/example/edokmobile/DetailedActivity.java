@@ -187,7 +187,7 @@ public class DetailedActivity extends AppCompatActivity {
                 ingredients.setText(ingredientsArr);
                 Glide.with(getApplicationContext())
                         .load(recipe.get("recipeImage"))
-                        .placeholder(R.drawable.like)
+                        .placeholder(R.drawable.baseline_wallpaper_24)
                         .error(R.drawable.group_23)
                         .into(detailImage);
             }
