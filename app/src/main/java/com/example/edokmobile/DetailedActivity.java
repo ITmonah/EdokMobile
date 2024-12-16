@@ -54,7 +54,6 @@ public class DetailedActivity extends AppCompatActivity {
     private TextView detailPrice;
     private ImageView detailImage;
     private LinearLayout linearLayout;
-    private ListView stepList;
     private TextView steps;
     String recipe_id;
     String url;
@@ -75,7 +74,6 @@ public class DetailedActivity extends AppCompatActivity {
         detailImage = findViewById(R.id.detailImage);
         linearLayout = findViewById(R.id.main);
         steps = findViewById(R.id.detailDes3);
-        //stepList = findViewById(R.id.stepList);
         url = ((MyApplication) getApplication()).getGlobalUrl();
         Intent intent = getIntent();
         recipe_id = intent.getStringExtra("recipe");
@@ -85,55 +83,70 @@ public class DetailedActivity extends AppCompatActivity {
 
     //ассинхронный поток
     public class OkHTTPHandler extends AsyncTask<Void,Void, ArrayList> { //что подаём на вход, что в середине, что возвращаем
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
-            Request.Builder builder = new Request.Builder(); //построитель запроса
-            Request request = builder.url(url + "recipe/" + recipe_id)
-                    .get() //тип запроса
-                    .build();
-            try {
-                Response response = client.newCall(request).execute();
-                JSONObject jsonObject = new JSONObject(response.body().string());//сначала объект элементов
-                ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
-                String title = jsonObject.getString("name"); //название рецепта
-                JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
-                String category = category_object.getString("name");
-                JSONObject autor_object = jsonObject.getJSONObject("user"); //автор рецепта
-                String autor = autor_object.getString("name");
-                String img = url + jsonObject.getString("face_img"); //картинка
-                JSONArray steps_array = jsonObject.getJSONArray("steps"); //шаги рецепта
-                for (int i = 0; i < steps_array.length(); i++) {
-                    JSONObject jsonObject_step = steps_array.getJSONObject(i);
-                    String number = jsonObject_step.getString("number"); //номер шага
-                    String info = jsonObject_step.getString("info"); //текст шага
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                Request.Builder builder = new Request.Builder(); //построитель запроса
+                Request request = builder.url(url + "recipe/" + recipe_id)
+                        .get() //тип запроса
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    JSONObject jsonObject = new JSONObject(response.body().string());//сначала объект элементов
+                    ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
+                    String title = jsonObject.getString("name"); //название рецепта
+                    JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
+                    String category = category_object.getString("name");
+                    JSONObject autor_object = jsonObject.getJSONObject("user"); //автор рецепта
+                    String autor = autor_object.getString("name");
+                    String img = url + jsonObject.getString("face_img"); //картинка
+                    JSONArray steps_array = jsonObject.getJSONArray("steps"); //шаги рецепта
+                    for (int i = 0; i < steps_array.length(); i++) {
+                        JSONObject jsonObject_step = steps_array.getJSONObject(i);
+                        String number = jsonObject_step.getString("number"); //номер шага
+                        String info = jsonObject_step.getString("info"); //текст шага
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("stepNumber", number);
+                        map.put("stepInfo", info);
+                        list.add(map);
+                    }
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("stepNumber", number);
-                    map.put("stepInfo", info);
+                    map.put("recipeName", title);
+                    map.put("recipeCategory", category);
+                    map.put("recipeAutor", autor);
+                    map.put("recipeImage", img);
                     list.add(map);
+                    return list;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                } catch (JSONException e) {
+                    Log.e("OkHTTPHandler", "JSON error: " + e.getMessage());
+                    return null;
                 }
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("recipeName", title);
-                map.put("recipeCategory", category);
-                map.put("recipeAutor", autor);
-                map.put("recipeImage", img);
-                list.add(map);
-                return list;
-            } catch (IOException e) {
-                Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
-            } catch (JSONException e) {
-                Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
             }
-            return null;
+            return null; // Достигли максимума попыток, вернули null
         }
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
-            String[] from = {"stepInfo"};
-            int to[] = {R.id.stepText};
             ArrayList <HashMap<String, Object>> filteredList = (ArrayList<HashMap<String, Object>>) s.stream()
                     .limit(s.size() -1) //вывожу все элементы, кроме последнего
                     .collect(Collectors.toCollection(ArrayList::new));
-            SimpleAdapter simpleAdapter = new SimpleAdapter(getApplicationContext(), filteredList, R.layout.step_items, from, to);
             if (s != null && s.size() > 0) {
                 HashMap<String, Object> recipe = (HashMap<String, Object>) s.get(s.size()-1); //берём последний элемент
                 detailName.setText((String) recipe.get("recipeName"));
@@ -151,15 +164,6 @@ public class DetailedActivity extends AppCompatActivity {
                         .error(R.drawable.group_23)
                         .into(detailImage);
             }
-            //stepList.setAdapter(simpleAdapter);
-            //отключение прокрутки
-//            stepList.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View view, MotionEvent motionEvent) {
-//                    return false;
-//                }
-//            });
         }
     }
-
 }

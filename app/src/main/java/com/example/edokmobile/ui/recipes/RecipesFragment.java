@@ -80,6 +80,8 @@ public class RecipesFragment extends Fragment {
     }
     //ассинхронный поток
     public class OkHTTPHandler extends AsyncTask<Void,Void,ArrayList> { //что подаём на вход, что в середине, что возвращаем
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
         //запуск экрана загрузки
         @Override
         protected void onPreExecute() {
@@ -95,44 +97,57 @@ public class RecipesFragment extends Fragment {
             if ( isCancelled()){
                 return null;
             }
-            Request.Builder builder = new Request.Builder(); //построитель запроса
-            Request request = builder.url(url + "recipe/page/true?sort=created_at&page=1&size=50")
-                    .get() //тип запроса
-                    .build();
-            try {
-                Response response = client.newCall(request).execute();
-                JSONObject jsonObject_start = new JSONObject(response.body().string());//сначала объект элементов
-                JSONArray jsonArray = jsonObject_start.getJSONArray("items");//массив элементов "items"
-                ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String id = jsonObject.getString("id"); //id рецепта
-                    String title = jsonObject.getString("name"); //название рецепта
-                    JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
-                    String category = category_object.getString("name");
-                    JSONObject autor_object = jsonObject.getJSONObject("user"); //автор рецепта
-                    String autor = autor_object.getString("name");
-                    String cooking_time = jsonObject.getString("cooking_time"); //время приготовления рецепта
-                    String img = url + jsonObject.getString("face_img"); //картинка
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("recipeId", id);
-                    map.put("recipeName", title);
-                    map.put("recipeAutor", autor);
-                    map.put("recipeCategory", "Категория: " + category);
-                    map.put("recipeCookingTime", cooking_time + "мин.");
-                    map.put("recipeImage", img);
-                    list.add(map);
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                Request.Builder builder = new Request.Builder(); //построитель запроса
+                Request request = builder.url(url + "recipe/page/true?sort=created_at&page=1&size=50")
+                        .get() //тип запроса
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    JSONObject jsonObject_start = new JSONObject(response.body().string());//сначала объект элементов
+                    JSONArray jsonArray = jsonObject_start.getJSONArray("items");//массив элементов "items"
+                    ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String id = jsonObject.getString("id"); //id рецепта
+                        String title = jsonObject.getString("name"); //название рецепта
+                        JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
+                        String category = category_object.getString("name");
+                        JSONObject autor_object = jsonObject.getJSONObject("user"); //автор рецепта
+                        String autor = autor_object.getString("name");
+                        String cooking_time = jsonObject.getString("cooking_time"); //время приготовления рецепта
+                        String img = url + jsonObject.getString("face_img"); //картинка
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("recipeId", id);
+                        map.put("recipeName", title);
+                        map.put("recipeAutor", autor);
+                        map.put("recipeCategory", "Категория: " + category);
+                        map.put("recipeCookingTime", cooking_time + "мин.");
+                        map.put("recipeImage", img);
+                        list.add(map);
+                    }
+                    return list;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                } catch (JSONException e) {
+                    Log.e("OkHTTPHandler", "JSON error: " + e.getMessage());
+                    return null;
                 }
-                return list;
-            } catch (IOException e) {
-                Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
-            } catch (JSONException e) {
-                Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
-            } catch (Exception e) {
-                Log.e("MyAsyncTask", "Ошибка в doInBackground", e);
-                return null;
             }
-            return null;
+            return null; // Достигли максимума попыток, вернули null
         }
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
@@ -217,6 +232,8 @@ public class RecipesFragment extends Fragment {
     }
     //выпадающий список
     public class Category_list extends AsyncTask<Void,Void,ArrayList> {
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
         //запуск экрана загрузки
         @Override
         protected void onPreExecute() {
@@ -232,38 +249,50 @@ public class RecipesFragment extends Fragment {
             if ( isCancelled()){
                 return null;
             }
-            //запрос для вывода категорий
-            Request.Builder builder_category = new Request.Builder(); //построитель запроса
-            Request request_category = builder_category.url(url +"category/")
-                    .get() //тип запроса
-                    .build();
-            try {
-                Response response = client.newCall(request_category).execute();
-                JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
-                ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("categoryName", "Всё");
-                list.add(map);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String id = jsonObject.getString("id"); //id категории
-                    String title = jsonObject.getString("name"); //название категории
-                    map = new HashMap<>();
-                    map.put("categoryId", id);
-                    map.put("categoryName", title);
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                //запрос для вывода категорий
+                Request.Builder builder_category = new Request.Builder(); //построитель запроса
+                Request request_category = builder_category.url(url +"category/")
+                        .get() //тип запроса
+                        .build();
+                try {
+                    Response response = client.newCall(request_category).execute();
+                    JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
+                    ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("categoryName", "Всё");
                     list.add(map);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String id = jsonObject.getString("id"); //id категории
+                        String title = jsonObject.getString("name"); //название категории
+                        map = new HashMap<>();
+                        map.put("categoryId", id);
+                        map.put("categoryName", title);
+                        list.add(map);
+                    }
+                    return list;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                } catch (JSONException e) {
+                    Log.e("OkHTTPHandler", "JSON error: " + e.getMessage());
+                    return null;
                 }
-                return list;
-            } catch (IOException e) {
-                Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
-                return new ArrayList<>(); // Возвращаем пустой список при ошибке
-            } catch (JSONException e) {
-                Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
-                return new ArrayList<>(); // Возвращаем пустой список при ошибке
-            } catch (Exception e) {
-                Log.e("MyAsyncTask", "Ошибка в doInBackground", e);
-                return null;
             }
+            return null; // Достигли максимума попыток, вернули null
         }
         @Override
         protected void onPostExecute(ArrayList s) {
