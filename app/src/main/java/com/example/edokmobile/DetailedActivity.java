@@ -53,9 +53,9 @@ public class DetailedActivity extends AppCompatActivity {
     private TextView detailDes;
     private TextView detailPrice;
     private ImageView detailImage;
-    private LinearLayout linearLayout;
     private TextView steps;
     private TextView time;
+    private TextView ingredients;
     String recipe_id;
     String url;
     @Override
@@ -68,8 +68,8 @@ public class DetailedActivity extends AppCompatActivity {
         detailDes = findViewById(R.id.detailDes);
         detailPrice = findViewById(R.id.detailPrice);
         detailImage = findViewById(R.id.detailImage);
-        linearLayout = findViewById(R.id.main);
         steps = findViewById(R.id.detailDes3);
+        ingredients = findViewById(R.id.textIngredients);
         url = ((MyApplication) getApplication()).getGlobalUrl();
         Intent intent = getIntent();
         recipe_id = intent.getStringExtra("recipe");
@@ -98,6 +98,7 @@ public class DetailedActivity extends AppCompatActivity {
                     String category = category_object.getString("name");
                     JSONObject autor_object = jsonObject.getJSONObject("user"); //автор рецепта
                     String autor = autor_object.getString("name");
+                    String time = jsonObject.getString("cooking_time"); //время готовки
                     String img = url + jsonObject.getString("face_img"); //картинка
                     JSONArray steps_array = jsonObject.getJSONArray("steps"); //шаги рецепта
                     for (int i = 0; i < steps_array.length(); i++) {
@@ -109,11 +110,26 @@ public class DetailedActivity extends AppCompatActivity {
                         map.put("stepInfo", info);
                         list.add(map);
                     }
+                    JSONArray ingredients_array = jsonObject.getJSONArray("counts"); //ингредиенты рецепта
+                    for (int i = 0; i < ingredients_array.length(); i++) {
+                        JSONObject jsonObject_ingredient = ingredients_array.getJSONObject(i);
+                        String count = jsonObject_ingredient.getString("count"); //количество ингредиента
+                        JSONObject ingredient_object = jsonObject_ingredient.getJSONObject("ingredient"); //название ингредиента
+                        String name = ingredient_object.getString("name");
+                        JSONObject SYS_object = jsonObject_ingredient.getJSONObject("system_of_calc"); //система исчисления
+                        String sys = SYS_object.getString("name");
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("ingrCount", count);
+                        map.put("ingrName", name);
+                        map.put("ingrSys", sys);
+                        list.add(map);
+                    }
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("recipeName", title);
                     map.put("recipeCategory", category);
                     map.put("recipeAutor", autor);
                     map.put("recipeImage", img);
+                    map.put("recipeTime", time);
                     list.add(map);
                     return list;
                 } catch (IOException e) {
@@ -136,45 +152,6 @@ public class DetailedActivity extends AppCompatActivity {
                 }
             }
             return null; // Достигли максимума попыток, вернули null
-            Request.Builder builder = new Request.Builder(); //построитель запроса
-            Request request = builder.url(url + "recipe/" + recipe_id)
-                    .get() //тип запроса
-                    .build();
-            try {
-                Response response = client.newCall(request).execute();
-                JSONObject jsonObject = new JSONObject(response.body().string());//сначала объект элементов
-                ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
-                String title = jsonObject.getString("name"); //название рецепта
-                JSONObject category_object = jsonObject.getJSONObject("category"); //категория рецепта
-                String category = category_object.getString("name");
-                JSONObject autor_object = jsonObject.getJSONObject("user");//автор рецепта
-                String autor = autor_object.getString("name");
-                String time = jsonObject.getString("cooking_time");
-                String img = url + jsonObject.getString("face_img"); //картинка
-                JSONArray steps_array = jsonObject.getJSONArray("steps"); //шаги рецепта
-                for (int i = 0; i < steps_array.length(); i++) {
-                    JSONObject jsonObject_step = steps_array.getJSONObject(i);
-                    String number = jsonObject_step.getString("number"); //номер шага
-                    String info = jsonObject_step.getString("info"); //текст шага
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("stepNumber", number);
-                    map.put("stepInfo", info);
-                    list.add(map);
-                }
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("recipeName", title);
-                map.put("recipeCategory", category);
-                map.put("recipeAutor", autor);
-                map.put("recipeImage", img);
-                map.put("recipeTime", time);
-                list.add(map);
-                return list;
-            } catch (IOException e) {
-                Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
-            } catch (JSONException e) {
-                Log.e("OkHTTPHandler", "Ошибка JSON: " + e.getMessage());
-            }
-            return null;
         }
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
@@ -188,11 +165,26 @@ public class DetailedActivity extends AppCompatActivity {
                 detailDes.setText((String) recipe.get("recipeCategory"));
                 detailPrice.setText((String) recipe.get("recipeAutor"));
                 time.setText((String) recipe.get("recipeTime") + " мин.");
-                String stepsArr = "";
+                String stepsArr = ""; //шаги
                 for (int i = 0; i < filteredList.size(); i++) {
-                    stepsArr += i+1 + ". " + filteredList.get(i).get("stepInfo") + "\n\n";
+                    if (filteredList.get(i).get("stepInfo")!=null){
+                        stepsArr += i + 1 + ". " + filteredList.get(i).get("stepInfo");
+                        if (i < filteredList.size() - 1) {
+                            stepsArr += "\n\n";  //добавляем перенос строки, если не последний
+                        }
+                    }
                 }
                 steps.setText(stepsArr);
+                String ingredientsArr = ""; //ингредиенты
+                for (int i = 0; i < filteredList.size(); i++) {
+                    if (filteredList.get(i).get("ingrName")!=null){
+                        ingredientsArr += filteredList.get(i).get("ingrName") + " " + filteredList.get(i).get("ingrCount") + " " + filteredList.get(i).get("ingrSys");
+                        if (i < filteredList.size() - 1) {
+                            ingredientsArr += "\n";  //добавляем перенос строки, если не последний
+                        }
+                    }
+                }
+                ingredients.setText(ingredientsArr);
                 Glide.with(getApplicationContext())
                         .load(recipe.get("recipeImage"))
                         .placeholder(R.drawable.like)
