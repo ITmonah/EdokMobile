@@ -18,8 +18,15 @@
         tools:layout="@layout/fragment_recipes" />
 
     <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="com.example.edokmobile.ui.FavoriteFragment"
+        android:label="Избранное"
+        tools:layout="@layout/fragment_favorite" />
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.edokmobile.ui.profile.ProfileFragment"
         android:label="Профиль"
         tools:layout="@layout/fragment_profile" />
+
 </navigation>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/navigation_home"
@@ -12,8 +13,12 @@
         android:title="Рецепты" />
 
     <item
+        android:id="@+id/navigation_favorite"
+        android:icon="@drawable/baseline_favorite_24"
+        android:title="Избранное" />
+
+    <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/baseline_person_24"
         android:title="Профиль" />
-
 </menu>
