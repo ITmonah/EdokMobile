@@ -217,8 +217,8 @@ public class RecipesFragment extends Fragment {
             //установка адаптера
             listView.setAdapter(adapter);
 
-            loadingAnimation.setVisibility(View.GONE);
             //остановка анимации
+            loadingAnimation.setVisibility(View.GONE);
             loadingAnimation.clearAnimation();
             spinner.setVisibility(View.VISIBLE);
             searchText.setVisibility(View.VISIBLE);

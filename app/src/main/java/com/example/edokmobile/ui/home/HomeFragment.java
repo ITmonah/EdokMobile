@@ -321,6 +321,17 @@ public class HomeFragment extends Fragment {
                 textViewName = itemView.findViewById(R.id.textViewName);
                 textViewRaiting = itemView.findViewById(R.id.textViewRaiting);
                 imageTop = itemView.findViewById(R.id.imageTop);
+
+                itemView.setOnClickListener(view -> {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        HashMap<String, Object> item = data.get(getAdapterPosition());
+                        //Обработка клика
+                        Intent intent = new Intent(requireContext().getApplicationContext(), DetailedActivity.class);
+                        String recipeId = (String) item.get("recipeId");
+                        intent.putExtra("recipe", recipeId);
+                        startActivity(intent);
+                    }
+                });
             }
         }
     }

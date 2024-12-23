@@ -66,8 +66,8 @@
             android:focusable="true"
             android:scrollbars="none"
             tools:ignore="MissingConstraints">
-
         </ListView>
+
     </LinearLayout>
 
     <ImageView
