@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -121,6 +122,7 @@ public class HomeFragment extends Fragment {
                         map.put("topName", title);
                         map.put("topRaiting", raiting);
                         map.put("topImage", img);
+                        map.put("topLIST", "recipes");
                         list.add(map);
                     }
                     return list;
@@ -205,6 +207,7 @@ public class HomeFragment extends Fragment {
                         map.put("topName", title);
                         map.put("topRaiting", raiting);
                         map.put("topImage", img);
+                        map.put("topLIST", "users");
                         list.add(map);
                     }
                     return list;
@@ -325,11 +328,14 @@ public class HomeFragment extends Fragment {
                 itemView.setOnClickListener(view -> {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                         HashMap<String, Object> item = data.get(getAdapterPosition());
+                        String listId = (String) item.get("topLIST");
                         //Обработка клика
-                        Intent intent = new Intent(requireContext().getApplicationContext(), DetailedActivity.class);
-                        String recipeId = (String) item.get("recipeId");
-                        intent.putExtra("recipe", recipeId);
-                        startActivity(intent);
+                        if (!Objects.equals(listId, "users")){
+                            Intent intent = new Intent(requireContext().getApplicationContext(), DetailedActivity.class);
+                            String recipeId = (String) item.get("topId");
+                            intent.putExtra("recipe", recipeId);
+                            startActivity(intent);
+                        }
                     }
                 });
             }
