@@ -91,6 +91,7 @@ public class FavoriteFragment extends Fragment {
             while (retryCount < MAX_RETRIES) {
                 Request.Builder builder = new Request.Builder(); //построитель запроса
                 Request request = builder.url(url + "recipe/page/true/favorite?sort=created_at&page=1&size=50")
+                        .header("Authorization", "Bearer " + ((MyApplication) requireContext().getApplicationContext()).getAccessToken())
                         .get() //тип запроса
                         .build();
                 try {

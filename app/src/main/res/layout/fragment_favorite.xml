@@ -36,17 +36,21 @@
 
         <ListView
             android:id="@+id/listViewFavorite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:clickable="true"
             android:divider="?android:attr/panelBackground"
             android:dividerHeight="10dp"
             android:fadeScrollbars="true"
             android:focusable="true"
             android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardFavorite"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="-16dp">
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="MissingConstraints">
         </ListView>
 
         <ImageView
