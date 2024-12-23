@@ -36,6 +36,8 @@ import okhttp3.RequestBody;
 public class PasswordActivity extends AppCompatActivity {
     private Button next_btn;
     private EditText password_input;
+    private EditText name_input;
+    private EditText email_input;
     protected OkHttpClient client = new OkHttpClient();
     String url;
     @Override
@@ -46,6 +48,8 @@ public class PasswordActivity extends AppCompatActivity {
         url = ((MyApplication) getApplication()).getGlobalUrl();
         next_btn = findViewById(R.id.next_btn);
         password_input = findViewById(R.id.PasswordInput);
+        name_input = findViewById(R.id.NameInput);
+        email_input = findViewById(R.id.EmailInput);
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,11 +58,9 @@ public class PasswordActivity extends AppCompatActivity {
                     toast_acc.show();
                 }
                 else {
-                    if (password_input.getText().toString().trim().length() > 3 && password_input.getText().toString().trim().length() <= 20){
-                        //OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
-                        //okHTTPHandler.execute();
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                        startActivity(intent);
+                    if (password_input.getText().toString().trim().length() > 5 && password_input.getText().toString().trim().length() <= 20){
+                        OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
+                        okHTTPHandler.execute();
                     }
                     else {
                         Toast toast_acc = Toast.makeText(getApplicationContext(), "Пароль слишком длинный/короткий", Toast.LENGTH_SHORT);
@@ -75,11 +77,10 @@ public class PasswordActivity extends AppCompatActivity {
             if ( isCancelled()){
                 return null;
             }
-            GoogleSignInAccount account = ((MyApplication) getApplication()).getSomeVariable();
             try  {
                 JSONObject jo = new JSONObject();
-                jo.put("name", account.getDisplayName().toString());
-                jo.put("mail", account.getEmail().toString());
+                jo.put("name", name_input.getText().toString().trim());
+                jo.put("mail", email_input.getText().toString().trim());
                 jo.put("password", password_input.getText().toString().trim());
                 RequestBody formBody = RequestBody.create(JSON, String.valueOf(jo));
                 Request.Builder builder = new Request.Builder(); //построитель запроса
@@ -100,12 +101,7 @@ public class PasswordActivity extends AppCompatActivity {
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
             if (response.isSuccessful()) {
-                GoogleSignInAccount account = ((MyApplication) getApplication()).getSomeVariable();
-                String name = account.getDisplayName();
-                String email = account.getEmail();
-                Toast toast_acc = Toast.makeText(getApplicationContext(), "Привет, " + name + "\n" +"(" + email + ")", Toast.LENGTH_LONG);
-                toast_acc.show();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), EnterToAppActivity.class);
                 startActivity(intent);
             }
             else {

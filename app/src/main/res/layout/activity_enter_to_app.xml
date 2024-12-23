@@ -38,11 +38,12 @@
 
         <TextView
             android:id="@+id/textView11"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/montserrat_medium"
             android:text="Вход в приложение"
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="28sp" />
 
@@ -51,11 +52,10 @@
             android:layout_width="match_parent"
             android:layout_height="41dp"
             android:layout_marginBottom="20dp"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?№#$*"
             android:ems="10"
             android:fontFamily="@font/montserrat"
-            android:hint="Введите логин"
-            android:inputType="text"
+            android:hint="Введите почту"
+            android:inputType="textEmailAddress"
             android:textSize="20sp" />
 
         <EditText

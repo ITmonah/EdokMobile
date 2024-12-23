@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
     private Button login_btn;
+    private Button reg_btn;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     private String name;
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         login_btn = (android.widget.Button) findViewById(R.id.button2);
+        reg_btn = (android.widget.Button) findViewById(R.id.button3);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
@@ -43,10 +45,18 @@ public class LoginActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = gsc.getSignInIntent();
-                GoogleSignInLauncher.launch(intent);
-                //Intent intent = new Intent(getApplicationContext(),PasswordActivity.class);
-                //startActivity(intent);
+//                Intent intent = gsc.getSignInIntent();
+//                GoogleSignInLauncher.launch(intent);
+                Intent intent = new Intent(getApplicationContext(), EnterToAppActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        reg_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),PasswordActivity.class);
+                startActivity(intent);
             }
         });
     }

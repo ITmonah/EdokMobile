@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProfileFragment extends Fragment {
 
@@ -41,16 +43,17 @@ public class ProfileFragment extends Fragment {
         name = binding.textView77;
         email = binding.textView9;
         avatar = binding.imageView14;
-        GoogleSignInAccount account = ((MyApplication) getActivity().getApplication()).getSomeVariable();
-        name.setText(account.getDisplayName());
-        email.setText(account.getEmail());
-        String imageUrl = account.getPhotoUrl().toString();
-
-        Glide.with(this)
-                .load(imageUrl)
-                .placeholder(R.drawable.group_23) // опционально, пока изображение загружается
-                .error(R.drawable.group_23) // опционально, если загрузка изображения не удалась
-                .into(avatar);
+        ArrayList<HashMap<String, Object>> list = ((MyApplication) getActivity().getApplication()).getUserInfo();
+        HashMap<String, Object> recipe = list.get(list.size());
+        name.setText((String) recipe.get("username"));
+        email.setText((String) recipe.get("email"));
+//        String imageUrl = account.getPhotoUrl().toString();
+//
+//        Glide.with(this)
+//                .load(imageUrl)
+//                .placeholder(R.drawable.group_23) // опционально, пока изображение загружается
+//                .error(R.drawable.group_23) // опционально, если загрузка изображения не удалась
+//                .into(avatar);
         return root;
     }
 
