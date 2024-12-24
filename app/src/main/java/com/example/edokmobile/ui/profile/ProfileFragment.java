@@ -34,6 +34,7 @@ public class ProfileFragment extends Fragment {
     private TextView name;
     private TextView email;
     private ImageView avatar;
+    private ArrayList<HashMap<String, Object>> list;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,10 +44,10 @@ public class ProfileFragment extends Fragment {
         name = binding.textView77;
         email = binding.textView9;
         avatar = binding.imageView14;
-        ArrayList<HashMap<String, Object>> list = ((MyApplication) getActivity().getApplication()).getUserInfo();
-        HashMap<String, Object> recipe = list.get(list.size());
-        name.setText((String) recipe.get("username"));
-        email.setText((String) recipe.get("email"));
+        list = ((MyApplication) requireActivity().getApplication()).getUserInfo();
+        HashMap<String, Object> user = list.get(0);
+        name.setText((String) user.get("name"));
+        email.setText((String) user.get("email"));
 //        String imageUrl = account.getPhotoUrl().toString();
 //
 //        Glide.with(this)
