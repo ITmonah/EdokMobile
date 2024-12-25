@@ -164,11 +164,6 @@ public class DetailedActivity extends AppCompatActivity {
                 Request request = builder.url(url + "recipe/" + recipe_id)
                         .get() //тип запроса
                         .build();
-                //запрос на лайк и дизлайк
-                Request request_score = builder.url(url + "score/info/" + recipe_id)
-                        .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
-                        .get() //тип запроса
-                        .build();
                 try {
                     Response response = client.newCall(request).execute();
                     JSONObject jsonObject = new JSONObject(response.body().string());//сначала объект элементов
