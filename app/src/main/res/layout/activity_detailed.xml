@@ -30,6 +30,8 @@
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp">
 
+
+
                 <TextView
                     android:id="@+id/detailName"
                     android:layout_width="wrap_content"
@@ -42,6 +44,7 @@
                     android:textSize="24sp"
                     android:textStyle="bold">
                 </TextView>
+
 
             </androidx.cardview.widget.CardView>
 
@@ -347,6 +350,39 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+            <ImageButton
+                android:id="@+id/buttonLikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:src="@drawable/like"/>
+
+            <TextView
+                android:id="@+id/detailLikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:text="TextView" />
+
+            <ImageButton
+                android:id="@+id/buttonDizlikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:src="@drawable/bad_one" />
+
+            <TextView
+                android:id="@+id/detailDizlikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:text="TextView" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
