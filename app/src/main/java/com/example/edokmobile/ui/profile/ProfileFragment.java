@@ -34,6 +34,7 @@ public class ProfileFragment extends Fragment {
     private TextView name;
     private TextView email;
     private ImageView avatar;
+    String url;
     private ArrayList<HashMap<String, Object>> list;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -44,17 +45,19 @@ public class ProfileFragment extends Fragment {
         name = binding.textView77;
         email = binding.textView9;
         avatar = binding.imageView14;
+        url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
         list = ((MyApplication) requireActivity().getApplication()).getUserInfo();
         HashMap<String, Object> user = list.get(0);
         name.setText((String) user.get("name"));
         email.setText((String) user.get("email"));
-//        String imageUrl = account.getPhotoUrl().toString();
-//
-//        Glide.with(this)
-//                .load(imageUrl)
-//                .placeholder(R.drawable.group_23) // опционально, пока изображение загружается
-//                .error(R.drawable.group_23) // опционально, если загрузка изображения не удалась
-//                .into(avatar);
+        String url_pic = (String) user.get("image");
+        String imageUrl = url + url_pic;
+
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.group_23) // опционально, пока изображение загружается
+                .error(R.drawable.group_23) // опционально, если загрузка изображения не удалась
+                .into(avatar);
         return root;
     }
 

@@ -59,6 +59,8 @@ public class PasswordActivity extends AppCompatActivity {
                 }
                 else {
                     if (password_input.getText().toString().trim().length() > 5 && password_input.getText().toString().trim().length() <= 20){
+                        next_btn.setEnabled(false);
+                        next_btn.setText("Подождите...");
                         OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
                         okHTTPHandler.execute();
                     }
@@ -122,6 +124,8 @@ public class PasswordActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else {
+                next_btn.setEnabled(false);
+                next_btn.setText("Подождите...");
                 Toast toast_acc = Toast.makeText(getApplicationContext(), "Не удалось войти", Toast.LENGTH_LONG);
                 toast_acc.show();
             }
