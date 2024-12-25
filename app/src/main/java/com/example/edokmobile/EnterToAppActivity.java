@@ -142,27 +142,41 @@ public class EnterToAppActivity extends AppCompatActivity {
 
     public class OkHTTPHandler_User extends AsyncTask<Void, Void, Response> { //что подаём на вход, что в середине, что возвращаем
         public final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
 
         @Override
         protected Response doInBackground(Void... voids) { //действия в побочном потоке
             if (isCancelled()) {
                 return null;
             }
-            try {
-                Request.Builder builder = new Request.Builder(); //построитель запроса
-                Request request = builder.url(url + "user/me")
-                        .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
-                        .get() //тип запроса
-                        .build();
-                Response response = client.newCall(request).execute();
-                return response;
-            } catch (IOException e) {
-                Log.e("OkHTTPHandler", "Ошибка сети: " + e.getMessage());
-            } catch (Exception e) {
-                Log.e("MyAsyncTask", "Ошибка в doInBackground", e);
-                return null;
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                try {
+                    Request.Builder builder = new Request.Builder(); //построитель запроса
+                    Request request = builder.url(url + "user/me")
+                            .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
+                            .get() //тип запроса
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    return response;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                }
             }
-            return null;
+            return null; // Достигли максимума попыток, вернули null
         }
 
         @Override

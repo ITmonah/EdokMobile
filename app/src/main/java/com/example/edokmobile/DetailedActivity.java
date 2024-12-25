@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -39,11 +42,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class DetailedActivity extends AppCompatActivity {
@@ -53,6 +59,10 @@ public class DetailedActivity extends AppCompatActivity {
     private TextView detailDes;
     private TextView detailPrice;
     private ImageView detailImage;
+    private TextView detailLikes;
+    private TextView detailDizlikes;
+    private ImageButton Likes;
+    private ImageButton Dizlikes;
     private TextView steps;
     private TextView time;
     private TextView ingredients;
@@ -68,6 +78,10 @@ public class DetailedActivity extends AppCompatActivity {
         detailDes = findViewById(R.id.detailDes);
         detailPrice = findViewById(R.id.detailPrice);
         detailImage = findViewById(R.id.detailImage);
+        detailLikes = findViewById(R.id.detailLikes);
+        detailDizlikes = findViewById(R.id.detailDizlikes);
+        Likes = findViewById(R.id.buttonLikes); //кнопка лайка
+        Dizlikes = findViewById(R.id.buttonDizlikes); //кнопка дизлайка
         steps = findViewById(R.id.detailDes3);
         ingredients = findViewById(R.id.textIngredients);
         url = ((MyApplication) getApplication()).getGlobalUrl();
@@ -75,6 +89,67 @@ public class DetailedActivity extends AppCompatActivity {
         recipe_id = intent.getStringExtra("recipe");
         OkHTTPHandler handler = new OkHTTPHandler();
         handler.execute();
+        OkHTTPButton okHTTPButton = new OkHTTPButton();
+        okHTTPButton.execute();
+
+        Likes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentTag = (int) Likes.getTag(); // получаем tag
+                if (currentTag == R.drawable.like) {
+                    Likes.setImageResource(R.drawable.cooking_______2_);
+                    Dizlikes.setImageResource(R.drawable.bad_one);
+                    String count_likes = detailLikes.getText().toString();
+                    detailLikes.setText((String) String.valueOf(Integer.parseInt(count_likes) + 1 ) );
+
+                    Likes.setTag(R.drawable.cooking_______2_);
+                    Dizlikes.setTag(R.drawable.bad_one);
+
+                    OkHTTPLike okHTTPLike = new OkHTTPLike();
+                    okHTTPLike.execute();
+                } else {
+                    Likes.setImageResource(R.drawable.like);
+                    Dizlikes.setImageResource(R.drawable.bad_one);
+                    String count_likes = detailLikes.getText().toString();
+                    detailLikes.setText((String) String.valueOf(Integer.parseInt(count_likes) - 1 ) );
+
+                    Likes.setTag(R.drawable.like);
+                    Dizlikes.setTag(R.drawable.bad_one);
+
+                    OkHTTPDelete okHTTPDelete = new OkHTTPDelete();
+                    okHTTPDelete.execute();
+                }
+            }
+        });
+        Dizlikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentTag = (int) Dizlikes.getTag(); // получаем tag
+                if (currentTag == R.drawable.bad_one) {
+                    Likes.setImageResource(R.drawable.like);
+                    Dizlikes.setImageResource(R.drawable.chef_hat_one_________2_);
+                    String count_dizlikes = detailDizlikes.getText().toString();
+                    detailDizlikes.setText((String) String.valueOf(Integer.parseInt(count_dizlikes) + 1 ));
+
+                    Likes.setTag(R.drawable.like);
+                    Dizlikes.setTag(R.drawable.chef_hat_one_________2_);
+
+                    OkHTTPDizlike okHTTPDizlike = new OkHTTPDizlike();
+                    okHTTPDizlike.execute();
+                } else {
+                    Likes.setImageResource(R.drawable.like);
+                    Dizlikes.setImageResource(R.drawable.bad_one);
+                    String count_dizlikes = detailDizlikes.getText().toString();
+                    detailDizlikes.setText((String) String.valueOf(Integer.parseInt(count_dizlikes) - 1 ));
+
+                    Likes.setTag(R.drawable.like);
+                    Dizlikes.setTag(R.drawable.bad_one);
+
+                    OkHTTPDelete okHTTPDelete = new OkHTTPDelete();
+                    okHTTPDelete.execute();
+                }
+            }
+        });
     }
 
     //ассинхронный поток
@@ -87,6 +162,11 @@ public class DetailedActivity extends AppCompatActivity {
             while (retryCount < MAX_RETRIES) {
                 Request.Builder builder = new Request.Builder(); //построитель запроса
                 Request request = builder.url(url + "recipe/" + recipe_id)
+                        .get() //тип запроса
+                        .build();
+                //запрос на лайк и дизлайк
+                Request request_score = builder.url(url + "score/info/" + recipe_id)
+                        .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
                         .get() //тип запроса
                         .build();
                 try {
@@ -124,12 +204,16 @@ public class DetailedActivity extends AppCompatActivity {
                         map.put("ingrSys", sys);
                         list.add(map);
                     }
+                    String likes = jsonObject.getString("likes"); //лайки
+                    String dizlikes = jsonObject.getString("dizlikes"); //дизлайки
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("recipeName", title);
                     map.put("recipeCategory", category);
                     map.put("recipeAutor", autor);
                     map.put("recipeImage", img);
                     map.put("recipeTime", time);
+                    map.put("recipeLikes", likes);
+                    map.put("recipeDizlikes", dizlikes);
                     list.add(map);
                     return list;
                 } catch (IOException e) {
@@ -164,6 +248,8 @@ public class DetailedActivity extends AppCompatActivity {
                 detailName.setText((String) recipe.get("recipeName"));
                 detailDes.setText((String) recipe.get("recipeCategory"));
                 detailPrice.setText((String) recipe.get("recipeAutor"));
+                detailLikes.setText((String) recipe.get("recipeLikes"));
+                detailDizlikes.setText((String) recipe.get("recipeDizlikes"));
                 time.setText((String) recipe.get("recipeTime") + " мин.");
                 String stepsArr = ""; //шаги
                 for (int i = 0; i < filteredList.size(); i++) {
@@ -193,4 +279,224 @@ public class DetailedActivity extends AppCompatActivity {
             }
         }
     }
+
+    //кнопки
+    public class OkHTTPButton extends AsyncTask<Void,Void, ArrayList> { //что подаём на вход, что в середине, что возвращаем
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
+        @Override
+        protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                Request.Builder builder = new Request.Builder(); //построитель запроса
+                //запрос на лайк и дизлайк
+                Request request_score = builder.url(url + "score/info/" + recipe_id)
+                        .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
+                        .get() //тип запроса
+                        .build();
+                try {
+                    //запрос на лайк и дизлайк
+                    Response response_score = client.newCall(request_score).execute();
+                    JSONObject jsonObject_score = new JSONObject(response_score.body().string()); //сначала объект элементов
+                    ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
+                    String like_score = jsonObject_score.getString("status_like"); //статус лайка у рецепта
+                    String dizlike_score = jsonObject_score.getString("status_dizlike"); //статус дизлайка у рецепта
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("scoreLike", like_score);
+                    map.put("scoreDizlike", dizlike_score);
+                    list.add(map);
+                    return list;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                } catch (JSONException e) {
+                    Log.e("OkHTTPHandler", "JSON error: " + e.getMessage());
+                    return null;
+                }
+            }
+            return null; // Достигли максимума попыток, вернули null
+        }
+        @Override
+        protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
+            super.onPostExecute(s);
+            if (s != null && s.size() > 0) {
+                HashMap<String, Object> recipe = (HashMap<String, Object>) s.get(0);
+                String like = (String) recipe.get("scoreLike");
+                String dizlike = (String) recipe.get("scoreDizlike");
+                if (Objects.equals(like, "1") && Objects.equals(dizlike, "0")){
+                    Likes.setImageResource(R.drawable.cooking_______2_);
+                    Dizlikes.setImageResource(R.drawable.bad_one);
+
+                    Likes.setTag(R.drawable.cooking_______2_);
+                    Dizlikes.setTag(R.drawable.bad_one);
+                }
+                else if (Objects.equals(like, "0") && Objects.equals(dizlike, "1")){
+                    Likes.setImageResource(R.drawable.like);
+                    Dizlikes.setImageResource(R.drawable.chef_hat_one_________2_);
+
+                    Likes.setTag(R.drawable.like);
+                    Dizlikes.setTag(R.drawable.chef_hat_one_________2_);
+                }
+                else{
+                    Likes.setImageResource(R.drawable.like);
+                    Dizlikes.setImageResource(R.drawable.bad_one);
+
+                    Likes.setTag(R.drawable.like);
+                    Dizlikes.setTag(R.drawable.bad_one);
+                }
+            }
+        }
+    }
+
+    //отправка в бд
+    public class OkHTTPLike extends AsyncTask<Void,Void, Response> { //что подаём на вход, что в середине, что возвращаем
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
+        @Override
+        protected Response doInBackground(Void ... voids) { //действия в побочном потоке
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("score", recipe_id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
+                Request.Builder builder = new Request.Builder(); //построитель запроса
+                Request request_like = builder.url(url + "score/like/" + recipe_id)
+                        .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
+                        .post(body) //тип запроса
+                        .build();
+                try {
+                    //запрос на лайк и дизлайк
+                    Response response_like = client.newCall(request_like).execute();
+                    return response_like;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                }
+            }
+            return null; // Достигли максимума попыток, вернули null
+        }
+        @Override
+        protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
+            super.onPostExecute(response);
+        }
+    }
+
+    public class OkHTTPDizlike extends AsyncTask<Void,Void, Response> { //что подаём на вход, что в середине, что возвращаем
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
+        @Override
+        protected Response doInBackground(Void ... voids) { //действия в побочном потоке
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("score", recipe_id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
+                Request.Builder builder = new Request.Builder(); //построитель запроса
+                Request request_dizlike = builder.url(url + "score/dizlike/" + recipe_id)
+                        .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
+                        .post(body) //тип запроса
+                        .build();
+                try {
+                    Response response_dizlike = client.newCall(request_dizlike).execute();
+                    return response_dizlike;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                }
+            }
+            return null; // Достигли максимума попыток, вернули null
+        }
+        @Override
+        protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
+            super.onPostExecute(response);
+        }
+    }
+
+    public class OkHTTPDelete extends AsyncTask<Void,Void, Response> { //что подаём на вход, что в середине, что возвращаем
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
+        @Override
+        protected Response doInBackground(Void ... voids) { //действия в побочном потоке
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("score", recipe_id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json"));
+                Request.Builder builder = new Request.Builder(); //построитель запроса
+                Request request_delete = builder.url(url + "score/no/" + recipe_id)
+                        .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
+                        .post(body) //тип запроса
+                        .build();
+                try {
+                    Response response_delete = client.newCall(request_delete).execute();
+                    return response_delete;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                }
+            }
+            return null; // Достигли максимума попыток, вернули null
+        }
+        @Override
+        protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
+            super.onPostExecute(response);
+        }
+    }
 }
+
