@@ -96,25 +96,25 @@ public class DetailedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int currentTag = (int) Likes.getTag(); // получаем tag
-                if (currentTag == R.drawable.like) {
-                    Likes.setImageResource(R.drawable.cooking_______2_);
-                    Dizlikes.setImageResource(R.drawable.bad_one);
+                if (currentTag == R.drawable.baseline_favorite_border_24) {
+                    Likes.setImageResource(R.drawable.baseline_favorite_24);
+                    Dizlikes.setImageResource(R.drawable.baseline_thumb_down_off_alt_24);
                     String count_likes = detailLikes.getText().toString();
                     detailLikes.setText((String) String.valueOf(Integer.parseInt(count_likes) + 1 ) );
 
-                    Likes.setTag(R.drawable.cooking_______2_);
-                    Dizlikes.setTag(R.drawable.bad_one);
+                    Likes.setTag(R.drawable.baseline_favorite_24);
+                    Dizlikes.setTag(R.drawable.baseline_thumb_down_off_alt_24);
 
                     OkHTTPLike okHTTPLike = new OkHTTPLike();
                     okHTTPLike.execute();
                 } else {
-                    Likes.setImageResource(R.drawable.like);
-                    Dizlikes.setImageResource(R.drawable.bad_one);
+                    Likes.setImageResource(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setImageResource(R.drawable.baseline_thumb_down_off_alt_24);
                     String count_likes = detailLikes.getText().toString();
                     detailLikes.setText((String) String.valueOf(Integer.parseInt(count_likes) - 1 ) );
 
-                    Likes.setTag(R.drawable.like);
-                    Dizlikes.setTag(R.drawable.bad_one);
+                    Likes.setTag(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setTag(R.drawable.baseline_thumb_down_off_alt_24);
 
                     OkHTTPDelete okHTTPDelete = new OkHTTPDelete();
                     okHTTPDelete.execute();
@@ -125,25 +125,25 @@ public class DetailedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int currentTag = (int) Dizlikes.getTag(); // получаем tag
-                if (currentTag == R.drawable.bad_one) {
-                    Likes.setImageResource(R.drawable.like);
-                    Dizlikes.setImageResource(R.drawable.chef_hat_one_________2_);
+                if (currentTag == R.drawable.baseline_thumb_down_off_alt_24) {
+                    Likes.setImageResource(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setImageResource(R.drawable.baseline_thumb_down_alt_24);
                     String count_dizlikes = detailDizlikes.getText().toString();
                     detailDizlikes.setText((String) String.valueOf(Integer.parseInt(count_dizlikes) + 1 ));
 
-                    Likes.setTag(R.drawable.like);
-                    Dizlikes.setTag(R.drawable.chef_hat_one_________2_);
+                    Likes.setTag(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setTag(R.drawable.baseline_thumb_down_alt_24);
 
                     OkHTTPDizlike okHTTPDizlike = new OkHTTPDizlike();
                     okHTTPDizlike.execute();
                 } else {
-                    Likes.setImageResource(R.drawable.like);
-                    Dizlikes.setImageResource(R.drawable.bad_one);
+                    Likes.setImageResource(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setImageResource(R.drawable.baseline_thumb_down_off_alt_24);
                     String count_dizlikes = detailDizlikes.getText().toString();
                     detailDizlikes.setText((String) String.valueOf(Integer.parseInt(count_dizlikes) - 1 ));
 
-                    Likes.setTag(R.drawable.like);
-                    Dizlikes.setTag(R.drawable.bad_one);
+                    Likes.setTag(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setTag(R.drawable.baseline_thumb_down_off_alt_24);
 
                     OkHTTPDelete okHTTPDelete = new OkHTTPDelete();
                     okHTTPDelete.execute();
@@ -335,25 +335,25 @@ public class DetailedActivity extends AppCompatActivity {
                 String like = (String) recipe.get("scoreLike");
                 String dizlike = (String) recipe.get("scoreDizlike");
                 if (Objects.equals(like, "1") && Objects.equals(dizlike, "0")){
-                    Likes.setImageResource(R.drawable.cooking_______2_);
-                    Dizlikes.setImageResource(R.drawable.bad_one);
+                    Likes.setImageResource(R.drawable.baseline_favorite_24);
+                    Dizlikes.setImageResource(R.drawable.baseline_thumb_down_off_alt_24);
 
-                    Likes.setTag(R.drawable.cooking_______2_);
-                    Dizlikes.setTag(R.drawable.bad_one);
+                    Likes.setTag(R.drawable.baseline_favorite_24);
+                    Dizlikes.setTag(R.drawable.baseline_thumb_down_off_alt_24);
                 }
                 else if (Objects.equals(like, "0") && Objects.equals(dizlike, "1")){
-                    Likes.setImageResource(R.drawable.like);
-                    Dizlikes.setImageResource(R.drawable.chef_hat_one_________2_);
+                    Likes.setImageResource(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setImageResource(R.drawable.baseline_thumb_down_alt_24);
 
-                    Likes.setTag(R.drawable.like);
-                    Dizlikes.setTag(R.drawable.chef_hat_one_________2_);
+                    Likes.setTag(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setTag(R.drawable.baseline_thumb_down_alt_24);
                 }
                 else{
-                    Likes.setImageResource(R.drawable.like);
-                    Dizlikes.setImageResource(R.drawable.bad_one);
+                    Likes.setImageResource(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setImageResource(R.drawable.baseline_thumb_down_off_alt_24);
 
-                    Likes.setTag(R.drawable.like);
-                    Dizlikes.setTag(R.drawable.bad_one);
+                    Likes.setTag(R.drawable.baseline_favorite_border_24);
+                    Dizlikes.setTag(R.drawable.baseline_thumb_down_off_alt_24);
                 }
             }
         }
