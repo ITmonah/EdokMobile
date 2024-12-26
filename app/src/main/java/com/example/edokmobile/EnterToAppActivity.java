@@ -57,6 +57,8 @@ public class EnterToAppActivity extends AppCompatActivity {
                         Toast toast_acc = Toast.makeText(getApplicationContext(), "Введите пароль", Toast.LENGTH_SHORT);
                         toast_acc.show();
                     } else {
+                        next_btn.setEnabled(false);
+                        next_btn.setText("Выполняется вход...");
                         OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
                         okHTTPHandler.execute();
                     }
@@ -129,6 +131,8 @@ public class EnterToAppActivity extends AppCompatActivity {
                 }
 
             } else {
+                next_btn.setEnabled(true);
+                next_btn.setText("Далее");
                 Toast toast_acc = Toast.makeText(getApplicationContext(), "Не удалось войти", Toast.LENGTH_LONG);
                 toast_acc.show();
             }
@@ -191,11 +195,13 @@ public class EnterToAppActivity extends AppCompatActivity {
                     String email = jsonObject_start.getString("email");
                     String count_r = jsonObject_start.getString("count_r");
                     String raiting = jsonObject_start.getString("raiting");
+                    String image = jsonObject_start.getString("image");
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("name", name);
                     map.put("email", email);
                     map.put("count_r", count_r);
                     map.put("raiting", raiting);
+                    map.put("image", image);
                     list.add(map);
                     ((MyApplication) getApplicationContext()).setUserInfo(list);
                     Toast toast_acc = Toast.makeText(getApplicationContext(), "Добро пожаловать!", Toast.LENGTH_LONG);
