@@ -33,6 +33,8 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private TextView name;
     private TextView email;
+    private TextView count_recipes;
+    private TextView raiting;
     private ImageView avatar;
     String url;
     private ArrayList<HashMap<String, Object>> list;
@@ -44,12 +46,16 @@ public class ProfileFragment extends Fragment {
         View root = binding.getRoot();
         name = binding.textView77;
         email = binding.textView9;
+        count_recipes = binding.textView4;
+        raiting = binding.textView5;
         avatar = binding.imageView14;
         url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
         list = ((MyApplication) requireActivity().getApplication()).getUserInfo();
         HashMap<String, Object> user = list.get(0);
         name.setText((String) user.get("name"));
         email.setText((String) user.get("email"));
+        count_recipes.setText("Рецептов: " + (String) user.get("count_r"));
+        raiting.setText("Рейтинг: " + (String) user.get("raiting"));
         String url_pic = (String) user.get("image");
         String imageUrl = url + url_pic;
 
