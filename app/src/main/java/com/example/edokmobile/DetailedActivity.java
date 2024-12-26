@@ -96,12 +96,17 @@ public class DetailedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int currentTag = (int) Likes.getTag(); // получаем tag
+                int currentTag_diz = (int) Dizlikes.getTag(); // получаем tag дизлайка
                 if (currentTag == R.drawable.baseline_favorite_border_24) {
                     Likes.setImageResource(R.drawable.baseline_favorite_24);
                     Dizlikes.setImageResource(R.drawable.baseline_thumb_down_off_alt_24);
                     String count_likes = detailLikes.getText().toString();
                     detailLikes.setText((String) String.valueOf(Integer.parseInt(count_likes) + 1 ) );
-
+                    //уменьшение количества дизлайков, если до лайка был нажат дизлайк
+                    if (currentTag_diz == R.drawable.baseline_thumb_down_alt_24){
+                        String count_dizlikes = detailDizlikes.getText().toString();
+                        detailDizlikes.setText((String) String.valueOf(Integer.parseInt(count_dizlikes) - 1 ) );
+                    }
                     Likes.setTag(R.drawable.baseline_favorite_24);
                     Dizlikes.setTag(R.drawable.baseline_thumb_down_off_alt_24);
 
@@ -125,12 +130,17 @@ public class DetailedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int currentTag = (int) Dizlikes.getTag(); // получаем tag
+                int currentTag_like = (int) Likes.getTag(); // получаем tag лайка
                 if (currentTag == R.drawable.baseline_thumb_down_off_alt_24) {
                     Likes.setImageResource(R.drawable.baseline_favorite_border_24);
                     Dizlikes.setImageResource(R.drawable.baseline_thumb_down_alt_24);
                     String count_dizlikes = detailDizlikes.getText().toString();
                     detailDizlikes.setText((String) String.valueOf(Integer.parseInt(count_dizlikes) + 1 ));
-
+                    //уменьшение количества лайков, если до дизлайка был нажат лайк
+                    if (currentTag_like == R.drawable.baseline_favorite_24){
+                        String count_likes = detailLikes.getText().toString();
+                        detailLikes.setText((String) String.valueOf(Integer.parseInt(count_likes) - 1 ) );
+                    }
                     Likes.setTag(R.drawable.baseline_favorite_border_24);
                     Dizlikes.setTag(R.drawable.baseline_thumb_down_alt_24);
 
