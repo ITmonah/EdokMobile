@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detailed_steps">Steps</string>
+    <string name="detailed_category">Category</string>
+    <string name="detailed_ingredients">Ingredients</string>
+    <string name="detailed_pleasure">Enjoy your meal!</string>
+    <string name="enter_to_app_enter">Enter to app</string>
+    <string name="enter_to_app_hint_email">Enter your email</string>
+    <string name="enter_to_app_hint_password">Enter your password</string>
+    <string name="enter_to_app_next">Next</string>
+    <string name="login_enter_btn">Enter</string>
+    <string name="login_register_btn">REGISTER</string>
+    <string name="password_register">Registration</string>
+    <string name="password_enter_name">Enter your name</string>
+    <string name="password_password_hint">The password must contain only Latin letters from 6 to 20 characters</string>
+    <string name="favorite_title">Favorite</string>
+    <string name="home_info_text">Search for recipes by selecting a dish\'s category, subcategory, cuisine, or menu. And in the additional filters, you can search by the desired (or unnecessary) ingredient: just start writing its name, the application will select the appropriate one.</string>
+    <string name="home_best_dishes">Best dishes</string>
+    <string name="home_best_chefs">Best chefs</string>
+    <string name="profile_raiting">Raiting:</string>
+    <string name="profile_count_recipies">Recipes:</string>
+    <string name="profile_person_info">User Information</string>
+    <string name="profile_info_messages_title">Informational messages</string>
+    <string name="profile_info_messages_change">Receive information messages by E-mail</string>
+    <string name="profile_delete_account">Delete account</string>
+    <string name="recipes_find_btn">Recipe search</string>
+    <string name="recipes_category_title">Select a category</string>
+    <string name="navigation_home">Home</string>
+    <string name="navigation_recipes">Recipes</string>
+    <string name="navigation_favorite">Favorites</string>
+    <string name="navigation_profile">Profile</string>
+</resources>

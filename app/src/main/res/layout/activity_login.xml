@@ -49,14 +49,14 @@
             android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="#EB5160"
-            android:text="Войти"
+            android:text="@string/login_enter_btn"
             android:textSize="20sp" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ЗАРЕГИСТРИРОВАТЬСЯ" />
+            android:text="@string/login_register_btn" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

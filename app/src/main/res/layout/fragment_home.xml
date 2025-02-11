@@ -61,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="13dp"
                             android:fontFamily="@font/montserrat_bold"
-                            android:text="Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название приложение подберет соответствующий."
+                            android:text="@string/home_info_text"
                             android:textColor="#FFFFFF"
                             android:textSize="24sp" />
 
@@ -83,7 +83,7 @@
                         android:paddingLeft="13dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Лучшие блюда"
+                        android:text="@string/home_best_dishes"
                         android:textColor="#020202"
                         android:textSize="28sp" />
 
@@ -100,7 +100,7 @@
                         android:paddingLeft="13dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Лучшие повара"
+                        android:text="@string/home_best_chefs"
                         android:textColor="#020202"
                         android:textSize="28sp" />
 

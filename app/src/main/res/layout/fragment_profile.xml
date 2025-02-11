@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/montserrat_medium"
-                    android:text="Рейтинг: 4.97"
+                    android:text="@string/profile_raiting"
                     android:textAlignment="textStart"
                     android:textColor="#000000"
                     android:textSize="24sp" />
@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/montserrat_medium"
-                    android:text="Рецептов: 12"
+                    android:text="@string/profile_count_recipies"
                     android:textAlignment="textStart"
                     android:textColor="#000000"
                     android:textSize="24sp" />
@@ -151,7 +151,7 @@
                 android:fontFamily="@font/montserrat_medium"
                 android:paddingLeft="13dp"
                 android:paddingRight="13dp"
-                android:text="Данные о пользователе"
+                android:text="@string/profile_person_info"
                 android:textColor="#AEAEAE"
                 android:textSize="22sp" />
 
@@ -187,7 +187,7 @@
                 android:fontFamily="@font/montserrat_medium"
                 android:paddingLeft="13dp"
                 android:paddingRight="13dp"
-                android:text="Информационные сообщения"
+                android:text="@string/profile_info_messages_title"
                 android:textColor="#000000"
                 android:textSize="24sp" />
 
@@ -205,7 +205,7 @@
                     android:layout_marginBottom="23dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/montserrat"
-                    android:text="Получать информационные сообщения на E-mail"
+                    android:text="@string/profile_info_messages_change"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -216,7 +216,7 @@
                 android:layout_marginBottom="23dp"
                 android:background="#00FFFFFF"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="Удалить аккаунт"
+                android:text="@string/profile_delete_account"
                 android:textColor="#EB5160" />
 
         </LinearLayout>

@@ -1,8 +1,37 @@
 <resources>
-    <string name="app_name">EdokMobile</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name" translatable="false">EdokMobile</string>
+<!--    <string name="title_home" translatable="false">Home</string>-->
+<!--    <string name="title_dashboard" translatable="false">Dashboard</string>-->
+<!--    <string name="title_notifications" translatable="false">Notifications</string>-->
+<!--    &lt;!&ndash; TODO: Remove or change this placeholder text &ndash;&gt;-->
+<!--    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>-->
+    <string name="detailed_steps">Шаги</string>
+    <string name="detailed_category">Категория</string>
+    <string name="detailed_ingredients">Ингредиенты</string>
+    <string name="detailed_pleasure">Приятного аппетита!</string>
+    <string name="enter_to_app_enter">Вход в приложение</string>
+    <string name="enter_to_app_hint_email">Введите почту</string>
+    <string name="enter_to_app_hint_password">Введите пароль</string>
+    <string name="enter_to_app_next">Далее</string>
+    <string name="login_enter_btn">Войти</string>
+    <string name="login_register_btn">ЗАРЕГИСТРИРОВАТЬСЯ</string>
+    <string name="password_register">Регистрация</string>
+    <string name="password_enter_name">Введите имя</string>
+    <string name="password_password_hint">Пароль должен содержать только латинские буквы от 6 до 20 символов</string>
+    <string name="favorite_title">Избранное</string>
+    <string name="home_info_text">Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название приложение подберет соответствующий.</string>
+    <string name="home_best_dishes">Лучшие блюда</string>
+    <string name="home_best_chefs">Лучшие повара</string>
+    <string name="profile_raiting">Рейтинг:</string>
+    <string name="profile_count_recipies">Рецептов:</string>
+    <string name="profile_person_info">Данные о пользователе</string>
+    <string name="profile_info_messages_title">Информационные сообщения</string>
+    <string name="profile_info_messages_change">Получать информационные сообщения на E-mail</string>
+    <string name="profile_delete_account">Удалить аккаунт</string>
+    <string name="recipes_find_btn">Поиск рецепта</string>
+    <string name="recipes_category_title">Выберите категорию</string>
+    <string name="navigation_home">Главная</string>
+    <string name="navigation_recipes">Рецепты</string>
+    <string name="navigation_favorite">Избранное</string>
+    <string name="navigation_profile">Профиль</string>
 </resources>

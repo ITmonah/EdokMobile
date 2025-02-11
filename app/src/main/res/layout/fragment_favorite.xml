@@ -27,11 +27,10 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/montserrat_medium"
                 android:gravity="center"
-                android:text="Избранное"
+                android:text="@string/favorite_title"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
-                android:textStyle="bold">
-            </TextView>
+                android:textStyle="bold"></TextView>
         </androidx.cardview.widget.CardView>
 
         <ListView

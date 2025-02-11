@@ -293,7 +293,7 @@
                             android:layout_marginLeft="6dp"
                             android:layout_marginTop="6dp"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="Категория"
+                            android:text="@string/detailed_category"
                             android:textColor="#2E2E2E"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -352,7 +352,7 @@
                             android:layout_marginLeft="6dp"
                             android:layout_marginTop="6dp"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="Ингредиенты"
+                            android:text="@string/detailed_ingredients"
                             android:textColor="#2E2E2E"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -410,7 +410,7 @@
                             android:layout_marginLeft="6dp"
                             android:layout_marginTop="6dp"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="Шаги"
+                            android:text="@string/detailed_steps"
                             android:textColor="#2E2E2E"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -436,7 +436,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="6dp"
                         android:fontFamily="@font/montserrat_medium"
-                        android:text="Приятного аппетита!"
+                        android:text="@string/detailed_pleasure"
                         android:textColor="#EB5160"
                         android:textSize="20sp" />
 
