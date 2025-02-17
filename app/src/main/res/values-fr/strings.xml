@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detailed_steps">Actes</string>
+    <string name="detailed_category">Catégorie</string>
+    <string name="detailed_ingredients">Ingrédients</string>
+    <string name="detailed_pleasure">Faites un agréable repas!</string>
+    <string name="enter_to_app_enter">Connexion à l\'application</string>
+    <string name="enter_to_app_hint_email">Entrez le courrier</string>
+    <string name="enter_to_app_hint_password">Entrez le mot de passe</string>
+    <string name="enter_to_app_next">Ensuite</string>
+    <string name="login_enter_btn">Entrer</string>
+    <string name="login_register_btn">SE FAIRE ENREGISTRER</string>
+    <string name="password_register">Enregistrement</string>
+    <string name="password_enter_name">Entrez un nom</string>
+    <string name="password_password_hint">Le mot de passe ne doit contenir que des lettres latines de 6 à 20 caractères</string>
+    <string name="favorite_title">Élite</string>
+    <string name="home_info_text">Recherchez des recettes en choisissant la catégorie du plat, sa sous-catégorie, sa cuisine ou son menu. Et dans les filtres supplémentaires, vous pouvez rechercher l\'ingrédient désiré (ou inutile): il suffit de commencer à écrire son nom, l\'application choisira le bon.</string>
+    <string name="home_best_dishes">Meilleurs plats</string>
+    <string name="home_best_chefs">Meilleurs chefs</string>
+    <string name="profile_raiting">Classement:</string>
+    <string name="profile_count_recipies">Recettes:</string>
+    <string name="profile_person_info">Données utilisateur</string>
+    <string name="profile_info_messages_title">Communiqué</string>
+    <string name="profile_info_messages_change">Recevoir des messages d\'information sur E-mail</string>
+    <string name="profile_delete_account">Supprimer le compte</string>
+    <string name="recipes_find_btn">Recherche de recette</string>
+    <string name="recipes_category_title">Sélectionnez une catégorie</string>
+    <string name="navigation_home">Principale</string>
+    <string name="navigation_recipes">Recettes</string>
+    <string name="navigation_favorite">Élite</string>
+    <string name="navigation_profile">Profil</string>
+</resources>
