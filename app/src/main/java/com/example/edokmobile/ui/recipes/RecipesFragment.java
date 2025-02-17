@@ -122,8 +122,8 @@ public class RecipesFragment extends Fragment {
                         map.put("recipeId", id);
                         map.put("recipeName", title);
                         map.put("recipeAutor", autor);
-                        map.put("recipeCategory", "Категория: " + category);
-                        map.put("recipeCookingTime", cooking_time + "мин.");
+                        map.put("recipeCategory", getResources().getString(R.string.detailed_category) + " " + category);
+                        map.put("recipeCookingTime", cooking_time + getResources().getString(R.string.time_time_minutes_text));
                         map.put("recipeImage", img);
                         list.add(map);
                     }
@@ -183,7 +183,7 @@ public class RecipesFragment extends Fragment {
                         item = (String) itemMap.get("categoryName");
                         //обработка случая, если ключ не найден или значение не является строкой
                         if (item == null) {
-                            Log.e("Spinner", "Ключ не найден в Map, или значение не является строкой.");
+                            Log.e("Spinner", getResources().getString(R.string.spinner_error_log));
                             return;
                         }
                         String text1 = searchText.getText().toString(); //текст из строки поиска
@@ -206,7 +206,7 @@ public class RecipesFragment extends Fragment {
                     String text1 = s.toString(); //текст из строки поиска
                     String text2 = item; //текст из категории
                     if (text2==null || text2 ==""){
-                        text2= "Всё";
+                        text2= getResources().getString(R.string.spinner_all_text);
                     }
                     adapter.setFilterParams(text1, "recipeName", text2, "recipeCategory");
                 }
@@ -261,7 +261,7 @@ public class RecipesFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray(response.body().string());//сначала массив элементов
                     ArrayList<HashMap<String, Object>> list = new ArrayList<>(); //создание листа для значений
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("categoryName", "Всё");
+                    map.put("categoryName", getResources().getString(R.string.spinner_all_text));
                     list.add(map);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -300,13 +300,13 @@ public class RecipesFragment extends Fragment {
             String[] from_category = {"categoryName"};
             int to_category[] = {R.id.spinnerCategory};
             if (s.isEmpty()) {
-                Toast.makeText(getContext(), "Нет данных", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.toast_no_data), Toast.LENGTH_SHORT).show();
                 return;
             }
             SimpleAdapter simpleAdapter_category = new SimpleAdapter(requireContext().getApplicationContext(), s, R.layout.spinner_item, from_category, to_category);
             simpleAdapter_category.setDropDownViewResource(R.layout.spinner_item);
             if (spinner == null) {
-                Toast.makeText(getContext(), "Список пуст", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.toast_empty_list), Toast.LENGTH_SHORT).show();
                 return;
             }
             spinner.setAdapter(simpleAdapter_category);
@@ -349,7 +349,7 @@ public class RecipesFragment extends Fragment {
             List<Map<String, ?>> filteredList = new ArrayList<>();
 
             if (filterValue1 == null || filterValue1.isEmpty()) {
-                if (filterValue2 == null || filterValue2.isEmpty() || filterValue2.equals("Всё")) {
+                if (filterValue2 == null || filterValue2.isEmpty() || filterValue2.equals(getResources().getString(R.string.spinner_all_text))) {
                     //оба фильтра пусты - выводим все
                     filteredList.addAll(originalData);
                 } else {
@@ -361,7 +361,7 @@ public class RecipesFragment extends Fragment {
                     }
                 }
             } else { //поиск не пустой
-                if (filterValue2 == null || filterValue2.isEmpty() || filterValue2.equals("Всё")) {
+                if (filterValue2 == null || filterValue2.isEmpty() || filterValue2.equals(getResources().getString(R.string.spinner_all_text))) {
                     //задан ТОЛЬКО поиск
                     for (Map<String, ?> item : originalData) {
                         if (item.containsKey(filterKey1) && item.get(filterKey1).toString().toLowerCase().contains(filterValue1.toLowerCase())) {

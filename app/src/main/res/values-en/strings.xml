@@ -29,4 +29,16 @@
     <string name="navigation_recipes">Recipes</string>
     <string name="navigation_favorite">Favorites</string>
     <string name="navigation_profile">Profile</string>
+    <string name="profile_settings_lang">Language selection</string>
+    <string name="enter_to_app_waiting_btn">Logging in is underway...</string>
+    <string name="password_error_len">The password is too long/short</string>
+    <string name="enter_to_app_not_enter_error">Couldn\'t log in</string>
+    <string name="enter_to_app_welcome_toast">Welcome!</string>
+    <string name="login_enter_error">Login error</string>
+    <string name="time_time_minutes_text">min</string>
+    <string name="waiting_text_btn">Wait...</string>
+    <string name="spinner_all_text">All</string>
+    <string name="toast_no_data">No data available</string>
+    <string name="toast_empty_list">The list is empty</string>
+    <string name="spinner_error_log">The key was not found in the Map, or the value is not a string.</string>
 </resources>

@@ -113,7 +113,7 @@ public class FavoriteFragment extends Fragment {
                         map.put("recipeId", id);
                         map.put("recipeName", title);
                         map.put("recipeAutor", autor);
-                        map.put("recipeCategory", "Категория: " + category);
+                        map.put("recipeCategory", getResources().getString(R.string.detailed_category) + category);
                         map.put("recipeCookingTime", cooking_time + "мин.");
                         map.put("recipeImage", img);
                         list.add(map);

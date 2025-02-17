@@ -54,18 +54,18 @@ public class PasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (password_input.getText().toString().trim().matches("")){
-                    Toast toast_acc = Toast.makeText(getApplicationContext(), "Введите пароль", Toast.LENGTH_SHORT);
+                    Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_hint_password), Toast.LENGTH_SHORT);
                     toast_acc.show();
                 }
                 else {
                     if (password_input.getText().toString().trim().length() > 5 && password_input.getText().toString().trim().length() <= 20){
                         next_btn.setEnabled(false);
-                        next_btn.setText("Подождите...");
+                        next_btn.setText(getResources().getString(R.string.waiting_text_btn));
                         OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
                         okHTTPHandler.execute();
                     }
                     else {
-                        Toast toast_acc = Toast.makeText(getApplicationContext(), "Пароль слишком длинный/короткий", Toast.LENGTH_SHORT);
+                        Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.password_error_len), Toast.LENGTH_SHORT);
                         toast_acc.show();
                     }
                 }
@@ -125,8 +125,8 @@ public class PasswordActivity extends AppCompatActivity {
             }
             else {
                 next_btn.setEnabled(false);
-                next_btn.setText("Подождите...");
-                Toast toast_acc = Toast.makeText(getApplicationContext(), "Не удалось войти", Toast.LENGTH_LONG);
+                next_btn.setText(getResources().getString(R.string.waiting_text_btn));
+                Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_not_enter_error), Toast.LENGTH_LONG);
                 toast_acc.show();
             }
         }

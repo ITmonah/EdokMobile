@@ -29,4 +29,16 @@
     <string name="navigation_recipes">Recettes</string>
     <string name="navigation_favorite">Élite</string>
     <string name="navigation_profile">Profil</string>
+    <string name="profile_settings_lang">Sélection de la langue</string>
+    <string name="enter_to_app_waiting_btn">Connexion en cours...</string>
+    <string name="password_error_len">Mot de passe trop long/court</string>
+    <string name="enter_to_app_not_enter_error">Impossible de se connecter</string>
+    <string name="enter_to_app_welcome_toast">Bienvenue !</string>
+    <string name="login_enter_error">Erreur de connexion</string>
+    <string name="time_time_minutes_text">min</string>
+    <string name="waiting_text_btn">Patientez...</string>
+    <string name="spinner_all_text">C\'est tout</string>
+    <string name="toast_no_data">Pas de données</string>
+    <string name="toast_empty_list">La liste est vide</string>
+    <string name="spinner_error_log">La clé n\'est pas trouvée dans Map ou la valeur n\'est pas une chaîne.</string>
 </resources>

@@ -255,7 +255,7 @@ public class DetailedActivity extends AppCompatActivity {
                 detailPrice.setText((String) recipe.get("recipeAutor"));
                 detailLikes.setText((String) recipe.get("recipeLikes"));
                 detailDizlikes.setText((String) recipe.get("recipeDizlikes"));
-                time.setText((String) recipe.get("recipeTime") + " мин.");
+                time.setText((String) recipe.get("recipeTime") + " " + getResources().getString(R.string.time_time_minutes_text));
                 String stepsArr = ""; //шаги
                 for (int i = 0; i < filteredList.size(); i++) {
                     if (filteredList.get(i).get("stepInfo")!=null){

@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } catch (ApiException e) {
-                Toast toast = Toast.makeText(getApplicationContext(), "Ошибка входа", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.login_enter_error), Toast.LENGTH_LONG);
                 toast.show();
             }
         }

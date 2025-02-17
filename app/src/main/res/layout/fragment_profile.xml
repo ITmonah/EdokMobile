@@ -209,6 +209,27 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="13dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp"
+                android:text="@string/profile_settings_lang"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp"
+                android:scrollbarSize="12dp" />
+
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"

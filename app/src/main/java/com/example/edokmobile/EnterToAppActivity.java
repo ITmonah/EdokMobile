@@ -11,11 +11,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,15 +45,15 @@ public class EnterToAppActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (login_input.getText().toString().trim().matches("")) {
-                    Toast toast_acc = Toast.makeText(getApplicationContext(), "Введите логин", Toast.LENGTH_SHORT);
+                    Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_hint_email), Toast.LENGTH_SHORT);
                     toast_acc.show();
                 } else {
                     if (password_input.getText().toString().trim().matches("")) {
-                        Toast toast_acc = Toast.makeText(getApplicationContext(), "Введите пароль", Toast.LENGTH_SHORT);
+                        Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_hint_password), Toast.LENGTH_SHORT);
                         toast_acc.show();
                     } else {
                         next_btn.setEnabled(false);
-                        next_btn.setText("Выполняется вход...");
+                        next_btn.setText(getResources().getString(R.string.enter_to_app_waiting_btn));
                         OkHTTPHandler okHTTPHandler = new OkHTTPHandler();
                         okHTTPHandler.execute();
                     }
@@ -132,8 +127,8 @@ public class EnterToAppActivity extends AppCompatActivity {
 
             } else {
                 next_btn.setEnabled(true);
-                next_btn.setText("Далее");
-                Toast toast_acc = Toast.makeText(getApplicationContext(), "Не удалось войти", Toast.LENGTH_LONG);
+                next_btn.setText(getResources().getString(R.string.enter_to_app_next));
+                Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_not_enter_error), Toast.LENGTH_LONG);
                 toast_acc.show();
             }
         }
@@ -204,7 +199,7 @@ public class EnterToAppActivity extends AppCompatActivity {
                     map.put("image", image);
                     list.add(map);
                     ((MyApplication) getApplicationContext()).setUserInfo(list);
-                    Toast toast_acc = Toast.makeText(getApplicationContext(), "Добро пожаловать!", Toast.LENGTH_LONG);
+                    Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_welcome_toast), Toast.LENGTH_LONG);
                     toast_acc.show();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
@@ -215,7 +210,7 @@ public class EnterToAppActivity extends AppCompatActivity {
                 }
 
             } else {
-                Toast toast_acc = Toast.makeText(getApplicationContext(), "Не удалось войти", Toast.LENGTH_LONG);
+                Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_not_enter_error), Toast.LENGTH_LONG);
                 toast_acc.show();
             }
         }

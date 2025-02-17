@@ -1,5 +1,6 @@
 package com.example.edokmobile.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -273,7 +274,7 @@ public class HomeFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             HashMap<String, Object> item = data.get(position);
             holder.textViewName.setText((String) item.get("topName"));
-            holder.textViewRaiting.setText("Рейтинг: " + item.get("topRaiting"));
+            holder.textViewRaiting.setText(getResources().getString(R.string.profile_raiting) + " " + item.get("topRaiting"));
             //обработка изображения:
             Object imageObject = item.get("topImage");
             if (imageObject instanceof String) {

@@ -34,4 +34,16 @@
     <string name="navigation_recipes">Рецепты</string>
     <string name="navigation_favorite">Избранное</string>
     <string name="navigation_profile">Профиль</string>
+    <string name="profile_settings_lang" >Выбор языка</string>
+    <string name="enter_to_app_waiting_btn">Выполняется вход...</string>
+    <string name="enter_to_app_not_enter_error">Не удалось войти</string>
+    <string name="enter_to_app_welcome_toast">Добро пожаловать!</string>
+    <string name="login_enter_error">Ошибка входа</string>
+    <string name="time_time_minutes_text">мин.</string>
+    <string name="waiting_text_btn">Подождите...</string>
+    <string name="password_error_len">Пароль слишком длинный/короткий</string>
+    <string name="spinner_all_text">Всё</string>
+    <string name="toast_no_data">Нет данных</string>
+    <string name="toast_empty_list">Список пуст</string>
+    <string name="spinner_error_log">Ключ не найден в Map, или значение не является строкой.</string>
 </resources>

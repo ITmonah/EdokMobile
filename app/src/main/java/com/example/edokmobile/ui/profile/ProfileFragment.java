@@ -1,6 +1,5 @@
 package com.example.edokmobile.ui.profile;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -40,7 +39,6 @@ public class ProfileFragment extends Fragment {
     String url;
     private ArrayList<HashMap<String, Object>> list;
 
-    @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -56,10 +54,8 @@ public class ProfileFragment extends Fragment {
         HashMap<String, Object> user = list.get(0);
         name.setText((String) user.get("name"));
         email.setText((String) user.get("email"));
-        String old_count_recipes = count_recipes.getText().toString();
-        count_recipes.setText(old_count_recipes + (String) user.get("count_r"));
-        String old_rating = raiting.getText().toString();
-        raiting.setText(old_rating + (String) user.get("raiting"));
+        count_recipes.setText(getResources().getString(R.string.profile_count_recipies) + " " + (String) user.get("count_r"));
+        raiting.setText(getResources().getString(R.string.profile_raiting) + " " + (String) user.get("raiting"));
         String url_pic = (String) user.get("image");
         String imageUrl = url + url_pic;
 
