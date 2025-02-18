@@ -1,9 +1,13 @@
 package com.example.edokmobile;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,7 +17,7 @@ public class MyApplication extends Application {
 
     private GoogleSignInAccount account;
     protected OkHttpClient client = new OkHttpClient();
-    private String url = "https://5jfh958c-8000.euw.devtunnels.ms/";
+    private String url = "https://5jfh958c-8081.euw.devtunnels.ms/";
     private String accessToken;
     private ArrayList<HashMap<String, Object>> user_info;
 
