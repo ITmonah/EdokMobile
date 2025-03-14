@@ -36,27 +36,20 @@ public class LoginActivity extends AppCompatActivity {
     private Button reg_btn;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
-    private String lang;
-    public String APP_PREFERENCES = "mysettings";
-    public String APP_PREFERENCES_COUNTER = "counter";
-    private SharedPreferences mSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        String languageCode = LocaleHelper.getSavedLanguage(getApplicationContext());
+        if (languageCode != null && !languageCode.isEmpty()) {
+            LocaleHelper.setLocale(this, languageCode);
+        }
         setContentView(R.layout.activity_login);
-        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         login_btn = (android.widget.Button) findViewById(R.id.button2);
         reg_btn = (android.widget.Button) findViewById(R.id.button3);
-        if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
-            // Получаем из настроек
-            lang = mSettings.getString(APP_PREFERENCES_COUNTER, "ru");
-            changeLoc(LoginActivity.this,lang);
-        }
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
-
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,15 +67,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-    public void changeLoc(Activity activity, String langCode){
-        Locale locale=new Locale(langCode);
-        locale.setDefault(locale);
-        Resources resources = activity.getResources();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        android.content.res.Configuration conf = resources.getConfiguration();
-        conf.locale = new Locale(langCode.toLowerCase());
-        resources.updateConfiguration(conf, dm);
     }
 
     ActivityResultLauncher<Intent> GoogleSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {

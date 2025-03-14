@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 
@@ -17,9 +18,24 @@ public class MyApplication extends Application {
 
     private GoogleSignInAccount account;
     protected OkHttpClient client = new OkHttpClient();
-    private String url = "https://5jfh958c-8081.euw.devtunnels.ms/";
+    private String url = "http://10.0.2.2:8001/";
     private String accessToken;
     private ArrayList<HashMap<String, Object>> user_info;
+//    @Override
+//    public void onCreate() {
+//        super.onCreate();
+//        // При создании приложения, устанавливаем локаль из SharedPreferences
+//        setAppLocale(this);
+//    }
+//
+//    public void setAppLocale(Context context) {
+//        // Получаем сохраненный язык
+//        String languageCode = LocaleHelper.getSavedLanguage(context);
+//        // Устанавливаем локаль
+//        if (languageCode != null && !languageCode.isEmpty()) {
+//            LocaleHelper.setLocale(context, languageCode); // Используем метод setLocale из LocaleHelper
+//        }
+//    }
 
     public GoogleSignInAccount getSomeVariable() {
         return account;
@@ -52,5 +68,4 @@ public class MyApplication extends Application {
     public ArrayList<HashMap<String, Object>> getUserInfo() {
         return user_info;
     }
-
 }

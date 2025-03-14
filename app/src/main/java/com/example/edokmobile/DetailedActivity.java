@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -66,6 +68,7 @@ public class DetailedActivity extends AppCompatActivity {
     private TextView steps;
     private TextView time;
     private TextView ingredients;
+    private MediaPlayer mediaPlayer;
     String recipe_id;
     String url;
     @Override
@@ -91,13 +94,17 @@ public class DetailedActivity extends AppCompatActivity {
         handler.execute();
         OkHTTPButton okHTTPButton = new OkHTTPButton();
         okHTTPButton.execute();
-
+        mediaPlayer = MediaPlayer.create(this, R.raw.like);
         Likes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentTag = (int) Likes.getTag(); // получаем tag
                 int currentTag_diz = (int) Dizlikes.getTag(); // получаем tag дизлайка
                 if (currentTag == R.drawable.baseline_favorite_border_24) {
+                    if (mediaPlayer != null) {
+                        mediaPlayer.seekTo(0); // Перематываем к началу (если звук уже играл)
+                        mediaPlayer.start();
+                    }
                     Likes.setImageResource(R.drawable.baseline_favorite_24);
                     Dizlikes.setImageResource(R.drawable.baseline_thumb_down_off_alt_24);
                     String count_likes = detailLikes.getText().toString();
@@ -161,7 +168,15 @@ public class DetailedActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Освобождаем ресурсы MediaPlayer, когда Activity уничтожается
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
     //ассинхронный поток
     public class OkHTTPHandler extends AsyncTask<Void,Void, ArrayList> { //что подаём на вход, что в середине, что возвращаем
         private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
@@ -169,9 +184,10 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected ArrayList doInBackground(Void ... voids) { //действия в побочном потоке
             int retryCount = 0;
+            String lang = LocaleHelper.getSavedLanguage(getApplicationContext());
             while (retryCount < MAX_RETRIES) {
                 Request.Builder builder = new Request.Builder(); //построитель запроса
-                Request request = builder.url(url + "recipe/" + recipe_id)
+                Request request = builder.url(url + "recipe/" + recipe_id+"?lang_code="+lang)
                         .get() //тип запроса
                         .build();
                 try {

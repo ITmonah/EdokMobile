@@ -1,40 +1,30 @@
 package com.example.edokmobile.ui.home;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.edokmobile.DetailedActivity;
+import com.example.edokmobile.LocaleHelper;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentHomeBinding;
-import com.example.edokmobile.ui.recipes.RecipesFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,8 +33,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.OkHttpClient;
@@ -103,9 +91,10 @@ public class HomeFragment extends Fragment {
                 return null;
             }
             int retryCount = 0;
+            String lang = LocaleHelper.getSavedLanguage(getContext());
             while (retryCount < MAX_RETRIES) {
                 Request.Builder builder = new Request.Builder(); //построитель запроса
-                Request request = builder.url(url + "recipe/top/")
+                Request request = builder.url(url + "recipe/top/"+"?lang_code="+lang)
                         .get() //тип запроса
                         .build();
                 try {

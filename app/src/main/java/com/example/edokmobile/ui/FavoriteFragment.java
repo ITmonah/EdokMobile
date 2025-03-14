@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.edokmobile.DetailedActivity;
+import com.example.edokmobile.LocaleHelper;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentFavoriteBinding;
@@ -39,6 +40,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -88,9 +90,10 @@ public class FavoriteFragment extends Fragment {
                 return null;
             }
             int retryCount = 0;
+            String lang = LocaleHelper.getSavedLanguage(getContext());
             while (retryCount < MAX_RETRIES) {
                 Request.Builder builder = new Request.Builder(); //построитель запроса
-                Request request = builder.url(url + "recipe/page/true/favorite?sort=created_at&page=1&size=50")
+                Request request = builder.url(url + "recipe/page/true/favorite?sort=created_at&lang_code="+lang+"&page=1&size=50")
                         .header("Authorization", "Bearer " + ((MyApplication) requireContext().getApplicationContext()).getAccessToken())
                         .get() //тип запроса
                         .build();

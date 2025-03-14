@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.edokmobile.LocaleHelper;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentProfileBinding;
@@ -50,6 +51,9 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences mSettings;
     public String APP_PREFERENCES_COUNTER = "counter";
     public static final String APP_PREFERENCES = "mysettings";
+    private String currentLanguageCode; // Код текущего языка (ru, en, fr)
+    private String initialLanguageName;   // Название текущего языка (Русский, English, Français)
+    private Context context;
     String url;
     private ArrayList<HashMap<String, Object>> list;
     boolean first_run=true;
@@ -75,50 +79,82 @@ public class ProfileFragment extends Fragment {
         String imageUrl = url + url_pic;
 
         spinner_lang = binding.spinner;
+        currentLanguageCode = LocaleHelper.getSavedLanguage(getActivity().getApplicationContext());
+
+        // 2. Устанавливаем язык по умолчанию, если ничего не сохранено
+        if (currentLanguageCode == null || currentLanguageCode.isEmpty()) {
+            currentLanguageCode = "en"; // Устанавливаем "en" по умолчанию
+        }
+        context = getContext(); // Получаем контекст
+
+        if (context != null) { // Убеждаемся, что контекст не null
+            currentLanguageCode = LocaleHelper.getSavedLanguage(context);
+            // Преобразуем код языка в имя
+            switch (currentLanguageCode) {
+                case "ru":
+                    initialLanguageName = "Русский";
+                    break;
+                case "en":
+                    initialLanguageName = "English";
+                    break;
+                case "fr":
+                    initialLanguageName = "Français";
+                    break;
+                default:
+                    initialLanguageName = "English"; // Значение по умолчанию
+                    break;
+            }
+        } else {
+            // Обработка случая, когда контекст null
+            initialLanguageName = "English"; // Или другое значение по умолчанию
+        }
+
         String[] langs={"Русский","English","Français"};
         ArrayAdapter<String> adapter=new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,langs);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_lang.setAdapter(adapter);
 
-//        spinner_lang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                switch (parent.getItemAtPosition(position).toString()){
-//                    case "Русский":
-//                        changeLoc(getActivity(),"ru");
-//                        break;
-//                    case "English":
-//                        changeLoc(getActivity(),"en");
-//                        break;
-//                    case "Français":
-//                        changeLoc(getActivity(),"fr");
-//                        break;
-//                }
-//            }
-//        });
+        int initialPosition = -1;
+        for (int i = 0; i < langs.length; i++) {
+            if (langs[i].equals(initialLanguageName)) {
+                initialPosition = i;
+                break;
+            }
+        }
+        // Выбираем начальный язык (если он найден)
+        if (initialPosition >= 0) {
+            spinner_lang.setSelection(initialPosition, false); // false чтобы избежать вызова onItemSelected
+        }
+
         spinner_lang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(first_run){
-                    first_run=false;
-                    return;
-                }
-                switch (parent.getItemAtPosition(position).toString()){
+//                if (first_run) {
+//                    first_run = false;
+//                    return;
+//                }
+                String selectedLanguageName = parent.getItemAtPosition(position).toString();
+                String selectedLanguageCode;
+                switch (selectedLanguageName) {
                     case "Русский":
-                        changeLoc(getActivity(),"ru");
+                        selectedLanguageCode = "ru";
                         break;
                     case "English":
-                        changeLoc(getActivity(),"en");
+                        selectedLanguageCode = "en";
                         break;
                     case "Français":
-                        changeLoc(getActivity(),"fr");
+                        selectedLanguageCode = "fr";
+                        break;
+                    default:
+                        selectedLanguageCode = "en";
                         break;
                 }
+                LocaleHelper.changeLoc(getActivity(), selectedLanguageCode);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Ничего не выбрано
             }
         });
 
@@ -130,20 +166,6 @@ public class ProfileFragment extends Fragment {
         return root;
     }
 
-    public void changeLoc(Activity activity, String langCode){
-        Locale locale=new Locale(langCode);
-        locale.setDefault(locale);
-        Resources resources = activity.getResources();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        android.content.res.Configuration conf = resources.getConfiguration();
-        conf.locale = new Locale(langCode.toLowerCase());
-        resources.updateConfiguration(conf, dm);
-        SharedPreferences.Editor editor = mSettings.edit();
-        editor.putString(APP_PREFERENCES_COUNTER, langCode);
-        editor.apply();
-        activity.finish();
-        startActivity(getActivity().getIntent());
-    }
 
     @Override
     public void onDestroyView() {
