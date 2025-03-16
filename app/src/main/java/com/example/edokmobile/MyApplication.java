@@ -22,7 +22,7 @@ public class MyApplication extends Application {
 
     private GoogleSignInAccount account;
     protected OkHttpClient client = new OkHttpClient();
-    private String url = "https://zkjxvmvq-8000.euw.devtunnels.ms/";
+    private String url = "http://10.0.2.2:8001/";
     private String accessToken;
     private ArrayList<HashMap<String, Object>> user_info;
 //    @Override

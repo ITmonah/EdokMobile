@@ -253,10 +253,11 @@ public class RecipesFragment extends Fragment {
                 return null;
             }
             int retryCount = 0;
+            String lang = LocaleHelper.getSavedLanguage(getContext());
             while (retryCount < MAX_RETRIES) {
                 //запрос для вывода категорий
                 Request.Builder builder_category = new Request.Builder(); //построитель запроса
-                Request request_category = builder_category.url(url +"category/")
+                Request request_category = builder_category.url(url +"category/"+"?lang_code="+lang)
                         .get() //тип запроса
                         .build();
                 try {

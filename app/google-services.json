@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "279615364448",
+    "project_id": "edokmobile-567e9",
+    "storage_bucket": "edokmobile-567e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279615364448:android:e0b8af5620656aeaa95205",
+        "android_client_info": {
+          "package_name": "com.example.edokmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBINZTVN1cnmG4YpXwO1JGtvuWmciK5RO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
