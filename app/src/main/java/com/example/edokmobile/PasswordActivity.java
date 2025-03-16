@@ -2,6 +2,7 @@ package com.example.edokmobile;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +41,7 @@ public class PasswordActivity extends AppCompatActivity {
     private EditText password_input;
     private EditText name_input;
     private EditText email_input;
+    private String token_user;
     protected OkHttpClient client = new OkHttpClient();
     String url;
     @Override
@@ -71,6 +75,7 @@ public class PasswordActivity extends AppCompatActivity {
                 }
             }
         });
+        token_user = ((MyApplication) getApplication()).getToken();
     }
     public class OkHTTPHandler extends AsyncTask<Void,Void, Response> { //что подаём на вход, что в середине, что возвращаем
         private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
@@ -88,6 +93,7 @@ public class PasswordActivity extends AppCompatActivity {
                     jo.put("name", name_input.getText().toString().trim());
                     jo.put("mail", email_input.getText().toString().trim());
                     jo.put("password", password_input.getText().toString().trim());
+                    jo.put("token_phone", token_user);
                     RequestBody formBody = RequestBody.create(JSON, String.valueOf(jo));
                     Request.Builder builder = new Request.Builder(); //построитель запроса
                     Request request = builder.url(url + "user/reg")

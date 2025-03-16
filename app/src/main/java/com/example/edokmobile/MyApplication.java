@@ -2,6 +2,7 @@ package com.example.edokmobile;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -72,14 +73,24 @@ public class MyApplication extends Application {
         return user_info;
     }
 
-    //функции для токена телефона
-    private MutableLiveData<String> token = new MutableLiveData<>();
+    //переменные для токена телефона
+    private String token;
+    private static final String TAG = "MyApplication";
+    private static final String PREF_NAME = "MyPrefs";  // Название файла настроек
+    private static final String KEY_FCM_TOKEN = "fcm_token"; // Ключ для хранения токена
 
-    public void setToken(String myToken){
-        token.postValue(myToken);
+    public String getToken() {
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        token = prefs.getString(KEY_FCM_TOKEN, null); // null - значение по умолчанию, если токена нет
+        return token;
     }
 
-    public LiveData<String> getToken(){
-        return token;
+    public void setToken(String token) {
+        this.token = token;
+        //сохраняем токен в SharedPreferences
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_FCM_TOKEN, token);
+        editor.apply();
     }
 }
