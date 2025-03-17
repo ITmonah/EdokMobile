@@ -491,7 +491,7 @@ public class DetailedActivity extends AppCompatActivity {
                 Request.Builder builder = new Request.Builder(); //построитель запроса
                 Request request_delete = builder.url(url + "score/no/" + recipe_id)
                         .header("Authorization", "Bearer " + ((MyApplication) getApplication()).getAccessToken())
-                        .post(body) //тип запроса
+                        .delete(body) //тип запроса
                         .build();
                 try {
                     Response response_delete = client.newCall(request_delete).execute();
