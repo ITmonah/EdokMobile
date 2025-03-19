@@ -3,6 +3,7 @@ package com.example.edokmobile;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -44,6 +47,7 @@ public class PasswordActivity extends AppCompatActivity {
     private String token_user;
     protected OkHttpClient client = new OkHttpClient();
     String url;
+    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 123;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +80,17 @@ public class PasswordActivity extends AppCompatActivity {
             }
         });
         token_user = ((MyApplication) getApplication()).getToken();
+        requestNotificationPermission();
+    }
+
+    private void requestNotificationPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            //запрашиваем разрешение
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                    NOTIFICATION_PERMISSION_REQUEST_CODE);
+        }
     }
     public class OkHTTPHandler extends AsyncTask<Void,Void, Response> { //что подаём на вход, что в середине, что возвращаем
         private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
