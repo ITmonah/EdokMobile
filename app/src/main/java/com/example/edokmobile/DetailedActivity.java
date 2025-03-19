@@ -167,6 +167,8 @@ public class DetailedActivity extends AppCompatActivity {
                 }
             }
         });
+        Likes.setEnabled(false);
+        Dizlikes.setEnabled(false);
     }
     @Override
     protected void onDestroy() {
@@ -298,6 +300,8 @@ public class DetailedActivity extends AppCompatActivity {
                         .error(R.drawable.group_23)
                         .into(detailImage);
             }
+            Likes.setEnabled(true);
+            Dizlikes.setEnabled(true);
         }
     }
 
@@ -377,6 +381,8 @@ public class DetailedActivity extends AppCompatActivity {
                     Dizlikes.setTag(R.drawable.baseline_thumb_down_off_alt_24);
                 }
             }
+            Likes.setEnabled(true);
+            Dizlikes.setEnabled(true);
         }
     }
 
@@ -386,6 +392,8 @@ public class DetailedActivity extends AppCompatActivity {
         private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
         @Override
         protected Response doInBackground(Void ... voids) { //действия в побочном потоке
+            Likes.setEnabled(false);
+            Dizlikes.setEnabled(false);
             int retryCount = 0;
             while (retryCount < MAX_RETRIES) {
                 JSONObject jsonObject = new JSONObject();
@@ -425,6 +433,8 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            Likes.setEnabled(true);
+            Dizlikes.setEnabled(true);
         }
     }
 
@@ -433,6 +443,8 @@ public class DetailedActivity extends AppCompatActivity {
         private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
         @Override
         protected Response doInBackground(Void ... voids) { //действия в побочном потоке
+            Likes.setEnabled(false);
+            Dizlikes.setEnabled(false);
             int retryCount = 0;
             while (retryCount < MAX_RETRIES) {
                 JSONObject jsonObject = new JSONObject();
@@ -471,6 +483,8 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            Likes.setEnabled(true);
+            Dizlikes.setEnabled(true);
         }
     }
 
@@ -479,6 +493,8 @@ public class DetailedActivity extends AppCompatActivity {
         private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
         @Override
         protected Response doInBackground(Void ... voids) { //действия в побочном потоке
+            Likes.setEnabled(false);
+            Dizlikes.setEnabled(false);
             int retryCount = 0;
             while (retryCount < MAX_RETRIES) {
                 JSONObject jsonObject = new JSONObject();
@@ -517,6 +533,8 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            Likes.setEnabled(true);
+            Dizlikes.setEnabled(true);
         }
     }
 }

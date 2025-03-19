@@ -129,10 +129,10 @@ public class ProfileFragment extends Fragment {
         spinner_lang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                if (first_run) {
-//                    first_run = false;
-//                    return;
-//                }
+                if (first_run) {
+                    first_run = false;
+                    return;
+                }
                 String selectedLanguageName = parent.getItemAtPosition(position).toString();
                 String selectedLanguageCode;
                 switch (selectedLanguageName) {
