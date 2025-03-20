@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -170,6 +171,11 @@ public class FavoriteFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
+            if (s == null) {
+                //ошибка соединения
+                Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             //передача значений
             String[] from = {"recipeName", "recipeCategory", "recipeAutor","recipeCookingTime", "recipeImage"};
             int to[] = {R.id.textName,R.id.textCategory, R.id.detailPrice,R.id.textDataPublish,R.id.imageRecipe};

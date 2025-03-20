@@ -140,6 +140,13 @@ public class PasswordActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            if (response == null) {
+                //ошибка соединения
+                next_btn.setEnabled(true);
+                next_btn.setText(getResources().getString(R.string.enter_to_app_next));
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             if (response.isSuccessful()) {
                 Intent intent = new Intent(getApplicationContext(), EnterToAppActivity.class);
                 startActivity(intent);

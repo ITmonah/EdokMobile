@@ -119,6 +119,13 @@ public class EnterToAppActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList arrayList) { //действия после выполнения задач в фоне
             super.onPostExecute(arrayList);
+            if (arrayList == null) {
+                //ошибка соединения
+                next_btn.setEnabled(true);
+                next_btn.setText(getResources().getString(R.string.enter_to_app_next));
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             String token=arrayList.get(0).toString();
             if(token!="error"){
                 ((MyApplication) getApplicationContext()).setAccessToken(token);

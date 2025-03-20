@@ -51,4 +51,7 @@
     <string name="toast_empty_list">Список пуст</string>
     <string name="spinner_error_log">Ключ не найден в Map, или значение не является строкой.</string>
     <string name="not_profile_delete_account_error">Что-то пошло не так.</string>
+    <string name="connection_error">Проверьте подключение к интернету</string>
+    <string name="email_already_exists">Данная почта уже занята!</string>
+    <string name="username_already_exists">Данный никнейм уже занят!</string>
 </resources>

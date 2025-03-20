@@ -263,6 +263,11 @@ public class ProfileFragment extends Fragment {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            if (response == null) {
+                //ошибка соединения
+                Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             if (response.isSuccessful()) {
                 Toast toast_acc = Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.profile_delete_account_successfully), Toast.LENGTH_LONG);
                 toast_acc.show();

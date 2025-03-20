@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -163,6 +164,11 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
+            if (s == null) {
+                //ошибка соединения
+                Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
             topRecipes.setLayoutManager(layoutManager);
             //topRecipes.addItemDecoration(new ThirdWidthItemDecoration()); // Добавляем декоратор
@@ -248,6 +254,11 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
+            if (s == null) {
+                //ошибка соединения
+                Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
             topUsers.setLayoutManager(layoutManager);
             //topUsers.addItemDecoration(new ThirdWidthItemDecoration()); // Добавляем декоратор

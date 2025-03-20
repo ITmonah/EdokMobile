@@ -46,4 +46,7 @@
     <string name="toast_empty_list">The list is empty</string>
     <string name="spinner_error_log">The key was not found in the Map, or the value is not a string.</string>
     <string name="not_profile_delete_account_error">Something went wrong.</string>
+    <string name="connection_error">Check your internet connection</string>
+    <string name="email_already_exists">This mail is already busy!</string>
+    <string name="username_already_exists">This nickname is already occupied!!</string>
 </resources>

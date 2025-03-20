@@ -178,6 +178,11 @@ public class RecipesFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
+            if (s == null) {
+                //ошибка соединения
+                Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             //передача значений
             String[] from = {"recipeName", "recipeCategory", "recipeAutor","recipeCookingTime", "recipeImage"};
             int to[] = {R.id.textName,R.id.textCategory, R.id.detailPrice,R.id.textDataPublish,R.id.imageRecipe};
@@ -324,6 +329,11 @@ public class RecipesFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList s) {
             super.onPostExecute(s);
+            if (s == null) {
+                //ошибка соединения
+                Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             String[] from_category = {"categoryName"};
             int to_category[] = {R.id.spinnerCategory};
             if (s.isEmpty()) {

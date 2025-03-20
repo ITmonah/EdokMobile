@@ -263,6 +263,11 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
+            if (s == null) {
+                //ошибка соединения
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             ArrayList <HashMap<String, Object>> filteredList = (ArrayList<HashMap<String, Object>>) s.stream()
                     .limit(s.size() -1) //вывожу все элементы, кроме последнего
                     .collect(Collectors.toCollection(ArrayList::new));
@@ -355,6 +360,11 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList s) { //действия после выполнения задач в фоне
             super.onPostExecute(s);
+            if (s == null) {
+                //ошибка соединения
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             if (s != null && s.size() > 0) {
                 HashMap<String, Object> recipe = (HashMap<String, Object>) s.get(0);
                 String like = (String) recipe.get("scoreLike");
@@ -433,6 +443,11 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            if (response == null) {
+                //ошибка соединения
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             Likes.setEnabled(true);
             Dizlikes.setEnabled(true);
         }
@@ -483,6 +498,11 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            if (response == null) {
+                //ошибка соединения
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             Likes.setEnabled(true);
             Dizlikes.setEnabled(true);
         }
@@ -533,6 +553,11 @@ public class DetailedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
             super.onPostExecute(response);
+            if (response == null) {
+                //ошибка соединения
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+                return;
+            }
             Likes.setEnabled(true);
             Dizlikes.setEnabled(true);
         }
