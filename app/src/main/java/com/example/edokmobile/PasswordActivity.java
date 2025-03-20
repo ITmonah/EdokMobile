@@ -145,8 +145,8 @@ public class PasswordActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else {
-                next_btn.setEnabled(false);
-                next_btn.setText(getResources().getString(R.string.waiting_text_btn));
+                next_btn.setEnabled(true);
+                next_btn.setText(getResources().getString(R.string.enter_to_app_next));
                 Toast toast_acc = Toast.makeText(getApplicationContext(), getResources().getString(R.string.enter_to_app_not_enter_error), Toast.LENGTH_LONG);
                 toast_acc.show();
             }
