@@ -1,7 +1,10 @@
 package com.example.edokmobile.ui.profile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -9,29 +12,38 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.edokmobile.DetailedActivity;
+import com.example.edokmobile.EnterToAppActivity;
 import com.example.edokmobile.LocaleHelper;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentProfileBinding;
 import com.example.edokmobile.ui.home.HomeFragment;
+import com.example.edokmobile.ui.recipes.RecipesFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,15 +53,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
+    protected OkHttpClient client = new OkHttpClient();
     private TextView name;
     private TextView email;
     private TextView count_recipes;
     private Spinner spinner_lang;
     private TextView raiting;
     private ImageView avatar;
+    private Button button_delete_user;
     private SharedPreferences mSettings;
     public String APP_PREFERENCES_COUNTER = "counter";
     public static final String APP_PREFERENCES = "mysettings";
@@ -60,16 +80,19 @@ public class ProfileFragment extends Fragment {
     private ArrayList<HashMap<String, Object>> list;
     boolean first_run=true;
     private boolean isFragmentVisible = false; //флаг, показывающий, виден ли фрагмент
+    private User_delete userTask;
     @Override
     public void onResume() {
         super.onResume();
         isFragmentVisible = true;
+        button_delete_user.setEnabled(true);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         isFragmentVisible = false;
+        button_delete_user.setEnabled(false);
     }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -81,6 +104,8 @@ public class ProfileFragment extends Fragment {
         count_recipes = binding.textView4;
         raiting = binding.textView5;
         avatar = binding.imageView14;
+        button_delete_user = binding.buttonDeleteUser;
+        button_delete_user.setEnabled(false);
         url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
         list = ((MyApplication) requireActivity().getApplication()).getUserInfo();
         HashMap<String, Object> user = list.get(0);
@@ -176,13 +201,87 @@ public class ProfileFragment extends Fragment {
                 .placeholder(R.drawable.group_23) // опционально, пока изображение загружается
                 .error(R.drawable.group_23) // опционально, если загрузка изображения не удалась
                 .into(avatar);
+
+        button_delete_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle(R.string.profile_delete_account_question);
+                //кнопка "да"
+                builder.setPositiveButton(R.string.profile_delete_account_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        loadData();
+                    }
+                });
+                //кнопка "нет"
+                builder.setNegativeButton(R.string.profile_delete_account_no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         return root;
     }
 
-
+    public class User_delete extends AsyncTask<Void,Void, Response> { //что подаём на вход, что в середине, что возвращаем
+        private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
+        private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
+        @Override
+        protected Response doInBackground(Void ... voids) { //действия в побочном потоке
+            int retryCount = 0;
+            while (retryCount < MAX_RETRIES) {
+                Request.Builder builder = new Request.Builder(); //построитель запроса
+                Request request_delete = builder.url(url + "user/my_profile_delete")
+                        .header("Authorization", "Bearer " + ((MyApplication) requireContext().getApplicationContext()).getAccessToken())
+                        .delete() //тип запроса
+                        .build();
+                try {
+                    Response response_delete = client.newCall(request_delete).execute();
+                    return response_delete;
+                } catch (IOException e) {
+                    Log.e("OkHTTPHandler", "Network error: " + e.getMessage());
+                    retryCount++;
+                    if (retryCount >= MAX_RETRIES) {
+                        Log.e("OkHTTPHandler", "Max retries reached, request failed.");
+                        return null;
+                    }
+                    try {
+                        Thread.sleep(INITIAL_DELAY * retryCount); // экспоненциальная задержка
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        Log.e("OkHTTPHandler", "Thread interrupted.");
+                        return null;
+                    }
+                }
+            }
+            return null; // Достигли максимума попыток, вернули null
+        }
+        @Override
+        protected void onPostExecute(Response response) { //действия после выполнения задач в фоне
+            super.onPostExecute(response);
+            if (response.isSuccessful()) {
+                Toast toast_acc = Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.profile_delete_account_successfully), Toast.LENGTH_LONG);
+                toast_acc.show();
+                Intent intent = new Intent(getActivity().getApplicationContext(), EnterToAppActivity.class);
+                startActivity(intent);
+            }
+            else {
+                Toast toast_acc = Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.not_profile_delete_account_error), Toast.LENGTH_LONG);
+                toast_acc.show();
+            }
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    private void loadData() {
+        userTask = new User_delete();
+        userTask.execute();
     }
 }

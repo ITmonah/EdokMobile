@@ -23,6 +23,10 @@
     <string name="profile_info_messages_title">Communiqué</string>
     <string name="profile_info_messages_change">Recevoir des messages d\'information sur E-mail</string>
     <string name="profile_delete_account">Supprimer le compte</string>
+    <string name="profile_delete_account_question">Êtes-vous sûr de vouloir supprimer votre compte?</string>
+    <string name="profile_delete_account_yes">Oui</string>
+    <string name="profile_delete_account_no">Pas</string>
+    <string name="profile_delete_account_successfully">Compte supprimé avec succès!</string>
     <string name="recipes_find_btn">Recherche de recette</string>
     <string name="recipes_category_title">Sélectionnez une catégorie</string>
     <string name="navigation_home">Principale</string>
@@ -41,4 +45,5 @@
     <string name="toast_no_data">Pas de données</string>
     <string name="toast_empty_list">La liste est vide</string>
     <string name="spinner_error_log">La clé n\'est pas trouvée dans Map ou la valeur n\'est pas une chaîne.</string>
+    <string name="not_profile_delete_account_error">Quelque chose a mal tourné.</string>
 </resources>

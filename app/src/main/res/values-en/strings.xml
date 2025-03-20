@@ -23,6 +23,10 @@
     <string name="profile_info_messages_title">Informational messages</string>
     <string name="profile_info_messages_change">Receive information messages by E-mail</string>
     <string name="profile_delete_account">Delete account</string>
+    <string name="profile_delete_account_question">Are you sure you want to delete your account?</string>
+    <string name="profile_delete_account_yes">Yes</string>
+    <string name="profile_delete_account_no">No</string>
+    <string name="profile_delete_account_successfully">Account has been successfully deleted!</string>
     <string name="recipes_find_btn">Recipe search</string>
     <string name="recipes_category_title">Select a category</string>
     <string name="navigation_home">Home</string>
@@ -41,4 +45,5 @@
     <string name="toast_no_data">No data available</string>
     <string name="toast_empty_list">The list is empty</string>
     <string name="spinner_error_log">The key was not found in the Map, or the value is not a string.</string>
+    <string name="not_profile_delete_account_error">Something went wrong.</string>
 </resources>
