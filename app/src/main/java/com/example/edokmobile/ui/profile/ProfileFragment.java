@@ -29,7 +29,9 @@ import com.example.edokmobile.LocaleHelper;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentProfileBinding;
+import com.example.edokmobile.ui.home.HomeFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,7 +59,18 @@ public class ProfileFragment extends Fragment {
     String url;
     private ArrayList<HashMap<String, Object>> list;
     boolean first_run=true;
+    private boolean isFragmentVisible = false; //флаг, показывающий, виден ли фрагмент
+    @Override
+    public void onResume() {
+        super.onResume();
+        isFragmentVisible = true;
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        isFragmentVisible = false;
+    }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mSettings = this.getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);

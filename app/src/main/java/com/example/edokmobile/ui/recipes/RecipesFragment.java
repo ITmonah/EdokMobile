@@ -1,5 +1,6 @@
 package com.example.edokmobile.ui.recipes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,6 +32,8 @@ import com.example.edokmobile.LocaleHelper;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentRecipesBinding;
+import com.example.edokmobile.ui.FavoriteFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +62,27 @@ public class RecipesFragment extends Fragment {
     String url;
     String item;
     boolean isFirstSelection = true; //флаг для отслеживания первого выбора
+    private boolean isFragmentVisible = false; //флаг, показывающий, виден ли фрагмент
+    private Recipe_list recipesTask;
+    private Category_list categoryTask;
+    @Override
+    public void onResume() {
+        super.onResume();
+        isFragmentVisible = true;
+        loadData();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        isFragmentVisible = false;
+        if (recipesTask != null && !recipesTask.isCancelled()) {
+            recipesTask.cancel(true);
+        }
+        if (categoryTask != null && !categoryTask.isCancelled()) {
+            categoryTask.cancel(true);
+        }
+    }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -74,14 +97,14 @@ public class RecipesFragment extends Fragment {
         text_view.setVisibility(View.GONE);
         searchText.setVisibility(View.GONE);
         url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
-        OkHTTPHandler handler = new OkHTTPHandler();
-        Category_list category_list = new Category_list();
-        handler.execute();
-        category_list.execute();
+        //OkHTTPHandler handler = new OkHTTPHandler();
+        //Category_list category_list = new Category_list();
+        //handler.execute();
+        //category_list.execute();
         return root;
     }
     //ассинхронный поток
-    public class OkHTTPHandler extends AsyncTask<Void,Void,ArrayList> { //что подаём на вход, что в середине, что возвращаем
+    public class Recipe_list extends AsyncTask<Void,Void,ArrayList> { //что подаём на вход, что в середине, что возвращаем
         private static final int MAX_RETRIES = 3;  // Максимальное количество попыток
         private static final int INITIAL_DELAY = 1000; // Начальная задержка (1 секунда)
         //запуск экрана загрузки
@@ -442,6 +465,12 @@ public class RecipesFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    private void loadData() {
+        recipesTask = new Recipe_list();
+        recipesTask.execute();
+        categoryTask = new Category_list();
+        categoryTask.execute();
     }
 }
 

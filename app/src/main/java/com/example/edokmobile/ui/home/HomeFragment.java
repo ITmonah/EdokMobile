@@ -1,5 +1,6 @@
 package com.example.edokmobile.ui.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import com.example.edokmobile.LocaleHelper;
 import com.example.edokmobile.MyApplication;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentHomeBinding;
+import com.example.edokmobile.ui.recipes.RecipesFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +52,27 @@ public class HomeFragment extends Fragment {
     private FrameLayout frameLayout;
     private LinearLayout linearLayout;
     String url;
+    private boolean isFragmentVisible = false; //флаг, показывающий, виден ли фрагмент
+    private TopRecipes recipesTask;
+    private TopUsers usersTask;
+    @Override
+    public void onResume() {
+        super.onResume();
+        isFragmentVisible = true;
+        loadData();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        isFragmentVisible = false;
+        if (recipesTask != null && !recipesTask.isCancelled()) {
+            recipesTask.cancel(true);
+        }
+        if (usersTask != null && !usersTask.isCancelled()) {
+            usersTask.cancel(true);
+        }
+    }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -64,10 +87,10 @@ public class HomeFragment extends Fragment {
         frameLayout.setVisibility(View.GONE);
         linearLayout.setVisibility(View.GONE);
         url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
-        TopRecipes handler_recipes = new TopRecipes();
-        handler_recipes.execute();
-        TopUsers handler_users = new TopUsers();
-        handler_users.execute();
+        //TopRecipes handler_recipes = new TopRecipes();
+        //handler_recipes.execute();
+        //TopUsers handler_users = new TopUsers();
+        //handler_users.execute();
         return root;
     }
 
@@ -357,5 +380,11 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    private void loadData() {
+        recipesTask = new TopRecipes();
+        recipesTask.execute();
+        usersTask = new TopUsers();
+        usersTask.execute();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.edokmobile.ui;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import com.example.edokmobile.databinding.FragmentProfileBinding;
 import com.example.edokmobile.databinding.FragmentRecipesBinding;
 import com.example.edokmobile.ui.recipes.RecipesFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +57,28 @@ public class FavoriteFragment extends Fragment {
     private ListView listView;
     private ImageView loadingAnimation;
     String url;
-    String item;
+    private boolean isFragmentVisible = false; //флаг, показывающий, виден ли фрагмент
+    private FavoriteRecipes favoriteRecipesTask;
+    @Override
+    public void onResume() {
+        super.onResume();
+        isFragmentVisible = true;
+        loadData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isFragmentVisible = false;
+        //FavoriteRecipes handler = new FavoriteRecipes();
+        //handler.execute();
+        //favoriteRecipesTask = new FavoriteRecipes();
+        //favoriteRecipesTask.execute();
+        // Отменяем задачу, если она еще выполняется
+        if (favoriteRecipesTask != null && !favoriteRecipesTask.isCancelled()) {
+            favoriteRecipesTask.cancel(true);
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,8 +89,8 @@ public class FavoriteFragment extends Fragment {
         loadingAnimation = binding.loadingAnimation;
         listView.setVisibility(View.GONE);
         url = ((MyApplication) requireActivity().getApplication()).getGlobalUrl();
-        FavoriteRecipes handler = new FavoriteRecipes();
-        handler.execute();
+        //FavoriteRecipes handler = new FavoriteRecipes();
+        //handler.execute();
         return root;
     }
 
@@ -116,7 +140,7 @@ public class FavoriteFragment extends Fragment {
                         map.put("recipeId", id);
                         map.put("recipeName", title);
                         map.put("recipeAutor", autor);
-                        map.put("recipeCategory", getResources().getString(R.string.detailed_category) + category);
+                        map.put("recipeCategory", getResources().getString(R.string.detailed_category) + " " + category);
                         map.put("recipeCookingTime", cooking_time + "мин.");
                         map.put("recipeImage", img);
                         list.add(map);
@@ -202,5 +226,9 @@ public class FavoriteFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    private void loadData() {
+        favoriteRecipesTask = new FavoriteRecipes();
+        favoriteRecipesTask.execute();
     }
 }
