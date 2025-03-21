@@ -18,6 +18,7 @@
     <string name="password_register">Регистрация</string>
     <string name="password_enter_name">Введите имя</string>
     <string name="password_password_hint">Пароль должен содержать только латинские буквы от 6 до 20 символов</string>
+    <string name="email_email_hint">Почта введена неверно!</string>
     <string name="favorite_title">Избранное</string>
     <string name="home_info_text">Ищите рецепты, выбирая категорию блюда, его подкатегорию, кухню или меню. А в дополнительных фильтрах можно искать по нужному (или ненужному) ингредиенту: просто начните писать его название приложение подберет соответствующий.</string>
     <string name="home_best_dishes">Лучшие блюда</string>
@@ -43,6 +44,7 @@
     <string name="enter_to_app_not_enter_error">Не удалось войти</string>
     <string name="enter_to_app_welcome_toast">Добро пожаловать!</string>
     <string name="login_enter_error">Ошибка входа</string>
+    <string name="registration_enter_error">Ошибка регистрации</string>
     <string name="time_time_minutes_text">мин.</string>
     <string name="waiting_text_btn">Подождите...</string>
     <string name="password_error_len">Пароль слишком длинный/короткий</string>

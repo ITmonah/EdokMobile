@@ -13,6 +13,7 @@
     <string name="password_register">Enregistrement</string>
     <string name="password_enter_name">Entrez un nom</string>
     <string name="password_password_hint">Le mot de passe ne doit contenir que des lettres latines de 6 à 20 caractères</string>
+    <string name="email_email_hint">Le courrier n\'est pas entré correctement!</string>
     <string name="favorite_title">Élite</string>
     <string name="home_info_text">Recherchez des recettes en choisissant la catégorie du plat, sa sous-catégorie, sa cuisine ou son menu. Et dans les filtres supplémentaires, vous pouvez rechercher l\'ingrédient désiré (ou inutile): il suffit de commencer à écrire son nom, l\'application choisira le bon.</string>
     <string name="home_best_dishes">Meilleurs plats</string>
@@ -39,6 +40,7 @@
     <string name="enter_to_app_not_enter_error">Impossible de se connecter</string>
     <string name="enter_to_app_welcome_toast">Bienvenue !</string>
     <string name="login_enter_error">Erreur de connexion</string>
+    <string name="registration_enter_error">Erreur d\'inscription</string>
     <string name="time_time_minutes_text">min</string>
     <string name="waiting_text_btn">Patientez...</string>
     <string name="spinner_all_text">C\'est tout</string>

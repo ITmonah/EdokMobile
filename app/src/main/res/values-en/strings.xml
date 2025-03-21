@@ -13,6 +13,7 @@
     <string name="password_register">Registration</string>
     <string name="password_enter_name">Enter your name</string>
     <string name="password_password_hint">The password must contain only Latin letters from 6 to 20 characters</string>
+    <string name="email_email_hint">The email address is entered incorrectly!</string>
     <string name="favorite_title">Favorite</string>
     <string name="home_info_text">Search for recipes by selecting a dish\'s category, subcategory, cuisine, or menu. And in the additional filters, you can search by the desired (or unnecessary) ingredient: just start writing its name, the application will select the appropriate one.</string>
     <string name="home_best_dishes">Best dishes</string>
@@ -39,6 +40,7 @@
     <string name="enter_to_app_not_enter_error">Couldn\'t log in</string>
     <string name="enter_to_app_welcome_toast">Welcome!</string>
     <string name="login_enter_error">Login error</string>
+    <string name="registration_enter_error">Registration error</string>
     <string name="time_time_minutes_text">min</string>
     <string name="waiting_text_btn">Wait...</string>
     <string name="spinner_all_text">All</string>
