@@ -35,7 +35,9 @@ import com.bumptech.glide.Glide;
 import com.example.edokmobile.DetailedActivity;
 import com.example.edokmobile.EnterToAppActivity;
 import com.example.edokmobile.LocaleHelper;
+import com.example.edokmobile.LoginActivity;
 import com.example.edokmobile.MyApplication;
+import com.example.edokmobile.PasswordActivity;
 import com.example.edokmobile.R;
 import com.example.edokmobile.databinding.FragmentProfileBinding;
 import com.example.edokmobile.ui.home.HomeFragment;
@@ -271,7 +273,8 @@ public class ProfileFragment extends Fragment {
             if (response.isSuccessful()) {
                 Toast toast_acc = Toast.makeText(requireContext().getApplicationContext(), getResources().getString(R.string.profile_delete_account_successfully), Toast.LENGTH_LONG);
                 toast_acc.show();
-                Intent intent = new Intent(getActivity().getApplicationContext(), EnterToAppActivity.class);
+                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             }
             else {
