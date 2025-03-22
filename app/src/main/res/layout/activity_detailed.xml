@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="20dp"
+            android:paddingBottom="26dp"
             tools:context=".DetailedActivity">
 
             <androidx.cardview.widget.CardView
@@ -388,6 +388,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
                     android:orientation="vertical"
                     android:padding="4dp">
 
