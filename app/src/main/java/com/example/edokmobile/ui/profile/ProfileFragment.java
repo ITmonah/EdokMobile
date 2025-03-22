@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
 
         // 2. Устанавливаем язык по умолчанию, если ничего не сохранено
         if (currentLanguageCode == null || currentLanguageCode.isEmpty()) {
-            currentLanguageCode = "en"; // Устанавливаем "en" по умолчанию
+            currentLanguageCode = "ru"; // Устанавливаем "en" по умолчанию
         }
         context = getContext(); // Получаем контекст
 
@@ -139,12 +139,12 @@ public class ProfileFragment extends Fragment {
                     initialLanguageName = "Français";
                     break;
                 default:
-                    initialLanguageName = "English"; // Значение по умолчанию
+                    initialLanguageName = "Русский"; // Значение по умолчанию
                     break;
             }
         } else {
             // Обработка случая, когда контекст null
-            initialLanguageName = "English"; // Или другое значение по умолчанию
+            initialLanguageName = "Русский"; // Или другое значение по умолчанию
         }
 
         String[] langs={"Русский","English","Français"};
